@@ -12,3 +12,12 @@ class LinearAlgebra {
     private:
         int comm_rank, comm_size;
 };
+
+#define linalg_assert(condition) \
+    if(!(condition)){ \
+        std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << std::endl; \
+        MPI_Abort(MPI_COMM_WORLD, 0); \
+    }
+
+#define info(msg) \
+    std::cout << "\e[0;32m[INFO]: \e[0m" << msg << std::endl;

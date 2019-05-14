@@ -1,2 +1,3 @@
 
-add_library(LinearAlgebra LinearAlgebra.cpp)
+add_library(LinearAlgebra LinearAlgebra.cpp
+                          Vector.cpp)
