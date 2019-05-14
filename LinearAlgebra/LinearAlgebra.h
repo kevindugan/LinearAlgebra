@@ -3,6 +3,7 @@
 class LinearAlgebra {
 
     public:
+        LinearAlgebra();
         LinearAlgebra(int* argc, char*** argv);
         virtual ~LinearAlgebra();
 
@@ -11,6 +12,7 @@ class LinearAlgebra {
 
     private:
         int comm_rank, comm_size;
+        bool linalg_initialized_mpi;
 };
 
 #define linalg_assert(condition) \

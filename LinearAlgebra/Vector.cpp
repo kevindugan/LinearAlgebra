@@ -40,15 +40,6 @@ void Vector::print() const {
     } else {
         MPI_Send(this->values, this->local_size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     }
-    // std::string message;
-    // message += "[Rank " + std::to_string(this->linalg->rank()) + "]";
-    // message += " Local_size: " + std::to_string(this->local_size);
-    // message += " Global Index: " + std::to_string(this->global_starting_index);
-    // message += "\nValues: [ \n";
-    // for (unsigned int i = 0; i < this->local_size; i++)
-    //     message += "          " + std::to_string(this->values[i]) + "\n";
-    // message += "]";
-    // std::cout << message.c_str() << std::endl;
 }
 
 void Vector::setValues(const double &x){
