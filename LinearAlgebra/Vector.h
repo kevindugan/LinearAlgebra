@@ -1,6 +1,14 @@
 
 #include "LinearAlgebra.h"
 #include <vector>
+#include <utility>
+
+// Index that is at the beginning of the range and and index one past the end
+struct IndexRange {
+    IndexRange() : begin(0), end(1) {}
+    IndexRange(unsigned int a, unsigned int b) : begin(a), end(b) {}
+    unsigned int begin, end;
+};
 
 class Vector {
     public:
@@ -20,9 +28,12 @@ class Vector {
         double length() const;
 
         std::vector<unsigned int> getPartitionSize() const;
+
+        IndexRange getGlobalIndexRange() const {return this->globalIndexRange;}
         
     private:
         unsigned int global_size, local_size;
         double* values;
         const LinearAlgebra* linalg;
+        IndexRange globalIndexRange;
 };

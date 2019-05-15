@@ -3,9 +3,20 @@
 #include "math.h"
 
 Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
+    // Calculate the decomposed vector block size
     float ratio = float(size) / float(linalg.size());
     unsigned int splitIndex = size - linalg.size() * floor( ratio );
     this->local_size = (linalg.rank() < splitIndex) ? ceil( ratio ) : floor( ratio );
+
+    // Calculate the global index range for local vector
+    if (linalg.rank() < splitIndex){
+        this->globalIndexRange.begin = linalg.rank() * this->local_size;
+        this->globalIndexRange.end = (linalg.rank() + 1) * this->local_size;
+    } else {
+        unsigned int offset = splitIndex * (this->local_size + 1);
+        this->globalIndexRange.begin = (linalg.rank() - splitIndex) * this->local_size + offset;
+        this->globalIndexRange.end = (linalg.rank() - splitIndex +1) * this->local_size + offset;
+    }
 
     this->global_size = size;
     this->values = new double[this->local_size];
