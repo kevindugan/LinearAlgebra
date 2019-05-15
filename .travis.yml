@@ -1,7 +1,7 @@
 language: cpp
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y openmpi
+  - sudo apt-get install -y libopenmpi-dev
   - test -n $CC  && unset CC
   - test -n $CXX && unset CXX
 
