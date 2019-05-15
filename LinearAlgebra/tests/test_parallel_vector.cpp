@@ -1,8 +1,6 @@
 
-#include "gmock/gmock.h"
-#include "../Vector.h"
-
-using ::testing::ElementsAreArray;
+#include "Nucleus.h"
+#include "Vector.h"
 
 TEST(ParallelVector, init_modulo){
   LinearAlgebra init;
@@ -71,12 +69,4 @@ TEST(ParallelVector, zero_entries){
   ASSERT_NE(v.length(), 0.0);
   v.zeros();
   ASSERT_DOUBLE_EQ(v.length(), 0.0);
-}
-
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  MPI_Init(&argc, &argv);
-  int result = RUN_ALL_TESTS();
-  MPI_Finalize();
-  return result;
 }

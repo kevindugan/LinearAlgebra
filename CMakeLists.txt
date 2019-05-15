@@ -18,6 +18,7 @@ set(CMAKE_C_COMPILER mpicc)
 #####################################
 # Project
 #####################################
+add_subdirectory(Nucleus)
 add_subdirectory(LinearAlgebra)
 
 add_executable(test_exec main.cpp)
