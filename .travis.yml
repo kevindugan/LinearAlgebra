@@ -1,4 +1,5 @@
 language: cpp
+dist: xenial
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y libopenmpi-dev
@@ -10,13 +11,3 @@ script:
   - cmake ..
   - make
   - ctest
-
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
