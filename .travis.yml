@@ -1,5 +1,11 @@
 language: cpp
-dist: bionic
+dist: xenial
+before_script:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update
+  - sudo apt-get install -y gcc-7 g++-7 libopenmpi-dev
+  - sudo update-alternatives --remove-all gcc
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7
 
 script:
   - mkdir build && cd build
