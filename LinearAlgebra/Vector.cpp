@@ -13,7 +13,7 @@ Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
     this->linalg = &linalg;
 
     for (unsigned int i = 0; i < this->local_size; i++)
-        this->values[i] = double(i + this->global_starting_index);
+        this->values[i] = 0.0; //double(i + this->global_starting_index);
 }
 
 Vector::~Vector(){
@@ -28,7 +28,7 @@ void Vector::print() const {
         std::cout << "-----------------\n";
         for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
             double* buff = new double[this->local_size];
-            MPI_Recv(buff, this->local_size, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            this->linalg->comm().Recv(buff, this->local_size, MPI::DOUBLE, proc, 0);
             for (unsigned int index = 0; index < this->local_size; index++)
                 std::cout << "  " << buff[index] << "\n";
             if ( proc != this->linalg->size()-1)
@@ -38,8 +38,14 @@ void Vector::print() const {
         std::cout << "=================" << std::endl;
 
     } else {
-        MPI_Send(this->values, this->local_size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        this->linalg->comm().Send(this->values, this->local_size, MPI::DOUBLE, 0, 0);
     }
+}
+
+std::vector<unsigned int> Vector::getPartitionSize() const {
+    std::vector<unsigned int> result(this->linalg->size());
+    this->linalg->comm().Allgather(&this->local_size, 1, MPI::UNSIGNED, result.data(), 1, MPI::UNSIGNED);
+    return result;
 }
 
 void Vector::setValues(const double &x){
@@ -71,11 +77,11 @@ double Vector::length() const {
     if (this->linalg->rank() == 0){
         for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
             double dump;
-            MPI_Recv(&dump, 1, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            this->linalg->comm().Recv(&dump, 1, MPI::DOUBLE, proc, 0);
             result += dump;
         }
     } else {
-        MPI_Send(&result, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        this->linalg->comm().Send(&result, 1, MPI::DOUBLE, 0, 0);
     }
 
     return sqrt(result);

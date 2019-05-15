@@ -1,5 +1,6 @@
 
 #include "LinearAlgebra.h"
+#include <vector>
 
 class Vector {
     public:
@@ -16,6 +17,8 @@ class Vector {
         double getLocal(const unsigned int index) const;
 
         double length() const;
+
+        std::vector<unsigned int> getPartitionSize() const;
         
     private:
         unsigned int global_size, local_size;
