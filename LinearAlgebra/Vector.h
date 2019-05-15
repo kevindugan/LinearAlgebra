@@ -11,6 +11,7 @@ class Vector {
         void add(const Vector &x);
         void setValues(const double &x);
         void scale(const double &x);
+        void zeros();
 
         unsigned int size() const {return this->global_size;}
 

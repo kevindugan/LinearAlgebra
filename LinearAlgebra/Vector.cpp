@@ -48,6 +48,11 @@ std::vector<unsigned int> Vector::getPartitionSize() const {
     return result;
 }
 
+void Vector::zeros() {
+    for (unsigned int i = 0; i < this->local_size; i++)
+        this->values[i] = 0.0;
+}
+
 void Vector::setValues(const double &x){
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] = x;

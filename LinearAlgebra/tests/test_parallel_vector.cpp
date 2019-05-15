@@ -32,6 +32,16 @@ TEST(ParallelVector, init_non_modulo){
   ASSERT_THAT(part, ElementsAreArray({43, 43, 42}));
 }
 
+TEST(ParallelVector, zero_entries){
+  LinearAlgebra init;
+  Vector v(128, init);
+
+  v.setValues(0.12);
+  ASSERT_NE(v.length(), 0.0);
+  v.zeros();
+  ASSERT_DOUBLE_EQ(v.length(), 0.0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   MPI::Init(argc, argv);
