@@ -22,7 +22,6 @@ class Vector {
         
     private:
         unsigned int global_size, local_size;
-        unsigned int global_starting_index;
         double* values;
         const LinearAlgebra* linalg;
 };

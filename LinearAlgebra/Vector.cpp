@@ -3,17 +3,17 @@
 #include "math.h"
 
 Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
-    linalg_assert( (size % linalg.size()) == 0)
+    float ratio = float(size) / float(linalg.size());
+    unsigned int splitIndex = size - linalg.size() * floor( ratio );
+    this->local_size = (linalg.rank() < splitIndex) ? ceil( ratio ) : floor( ratio );
 
     this->global_size = size;
-    this->local_size = size / linalg.size();
-    this->global_starting_index = linalg.rank() * this->local_size;
     this->values = new double[this->local_size];
 
     this->linalg = &linalg;
 
     for (unsigned int i = 0; i < this->local_size; i++)
-        this->values[i] = 0.0; //double(i + this->global_starting_index);
+        this->values[i] = 0.0;
 }
 
 Vector::~Vector(){
