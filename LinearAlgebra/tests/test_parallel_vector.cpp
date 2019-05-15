@@ -2,8 +2,6 @@
 #include "Nucleus.h"
 #include "Vector.h"
 
-using ::testing::ElementsAreArray;
-
 TEST(ParallelVector, init_modulo){
   LinearAlgebra init;
   Vector v(15, init);
