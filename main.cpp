@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
 
-  LinearAlgebra init(argc, argv);
+  LinearAlgebra init(&argc, &argv);
   
   Vector v(15, init);
   Vector w(15, init);
