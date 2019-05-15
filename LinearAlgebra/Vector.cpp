@@ -39,7 +39,7 @@ void Vector::print() const {
         std::cout << "-----------------\n";
         for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
             double* buff = new double[this->local_size];
-            this->linalg->comm().Recv(buff, this->local_size, MPI::DOUBLE, proc, 0);
+            MPI_Recv(buff, this->local_size, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             for (unsigned int index = 0; index < this->local_size; index++)
                 std::cout << "  " << buff[index] << "\n";
             if ( proc != this->linalg->size()-1)
@@ -49,13 +49,13 @@ void Vector::print() const {
         std::cout << "=================" << std::endl;
 
     } else {
-        this->linalg->comm().Send(this->values, this->local_size, MPI::DOUBLE, 0, 0);
+        MPI_Send(this->values, this->local_size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     }
 }
 
 std::vector<unsigned int> Vector::getPartitionSize() const {
     std::vector<unsigned int> result(this->linalg->size());
-    this->linalg->comm().Allgather(&this->local_size, 1, MPI::UNSIGNED, result.data(), 1, MPI::UNSIGNED);
+    MPI_Allgather(&this->local_size, 1, MPI_UNSIGNED, result.data(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
     return result;
 }
 
@@ -93,11 +93,11 @@ double Vector::length() const {
     if (this->linalg->rank() == 0){
         for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
             double dump;
-            this->linalg->comm().Recv(&dump, 1, MPI::DOUBLE, proc, 0);
+            MPI_Recv(&dump, 1, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             result += dump;
         }
     } else {
-        this->linalg->comm().Send(&result, 1, MPI::DOUBLE, 0, 0);
+        MPI_Send(&result, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
     }
 
     return sqrt(result);

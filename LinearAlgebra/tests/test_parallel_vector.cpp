@@ -1,5 +1,4 @@
 
-#include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "../Vector.h"
 
@@ -76,8 +75,8 @@ TEST(ParallelVector, zero_entries){
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
-  MPI::Init(argc, argv);
+  MPI_Init(&argc, &argv);
   int result = RUN_ALL_TESTS();
-  MPI::Finalize();
+  MPI_Finalize();
   return result;
 }
