@@ -80,15 +80,41 @@ void Vector::scale(const double &x){
         this->values[i] *= x;
 }
 
-double Vector::getLocal(const unsigned int index) const {
-    return this->values[index];
+unsigned int Vector::findRankWithIndex(const unsigned int index) const {
+    float ratio = float(this->global_size) / float(this->linalg->size());
+    unsigned int splitRank = this->global_size - this->linalg->size() * floor( ratio );
+    unsigned int splitIndex = splitRank * ceil(ratio);
+    unsigned int ownerProc;
+    if (index < splitIndex)
+        ownerProc = floor( index / ceil(ratio) );
+    else {
+        unsigned int offset = splitRank * ceil(ratio);
+        ownerProc = floor( (index - offset) / floor(ratio) ) + splitRank;
+    }
+
+    return ownerProc;
+}
+
+double Vector::getValue(const unsigned int index) const {
+    linalg_assert(index < this->global_size)
+
+    // Calculate Rank containing index
+    unsigned int indexOnRank = this->findRankWithIndex(index);
+
+    double result;
+    if (indexOnRank == this->linalg->rank())
+        result = this->values[index - this->globalIndexRange.begin];
+
+    MPI_Bcast(&result, 1, MPI_DOUBLE, indexOnRank, MPI_COMM_WORLD);
+
+    return result;
 }
 
 void Vector::add(const Vector &x){
     linalg_assert(this->global_size == x.size())
     
     for (unsigned int i = 0; i < this->local_size; i++)
-        this->values[i] += x.getLocal(i);
+        this->values[i] += x.getValue(i);
 }
 
 double Vector::length() const {
