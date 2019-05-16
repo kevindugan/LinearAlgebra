@@ -66,7 +66,22 @@ TEST(ParallelVector, zero_entries){
   Vector v(128, init);
 
   v.setValues(0.12);
-  ASSERT_NE(v.length(), 0.0);
+  ASSERT_DOUBLE_EQ(v.length(), 1.3576450198781713);
   v.zeros();
   ASSERT_DOUBLE_EQ(v.length(), 0.0);
+}
+
+TEST(ParallelVector, set){
+  LinearAlgebra init;
+  Vector v(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  double expected_norm = 0.0;
+  for (auto item : vals)
+    expected_norm += item * item;
+  expected_norm = sqrt(expected_norm);
+  std::cout << "NORM: " << expected_norm << std::endl;
+
+  v.setValues(vals);
+  ASSERT_DOUBLE_EQ(v.length(), expected_norm);
 }

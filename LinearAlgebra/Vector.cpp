@@ -69,6 +69,12 @@ void Vector::setValues(const double &x){
         this->values[i] = x;
 }
 
+void Vector::setValues(const std::vector<double> &x){
+    Nucleus_ASSERT_EQ(x.size(), this->global_size)
+    for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
+        this->values[i] = x[j];
+}
+
 void Vector::scale(const double &x){
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] *= x;
@@ -86,19 +92,12 @@ void Vector::add(const Vector &x){
 }
 
 double Vector::length() const {
-    double result = 0.0;
+    double local_result = 0.0;
     for (unsigned int i = 0; i < this->local_size; i++)
-        result += this->values[i] * this->values[i];
+        local_result += this->values[i] * this->values[i];
 
-    if (this->linalg->rank() == 0){
-        for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
-            double dump;
-            MPI_Recv(&dump, 1, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            result += dump;
-        }
-    } else {
-        MPI_Send(&result, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
-    }
+    double global_result = 0.0;
+    MPI_Allreduce(&local_result, &global_result, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 
-    return sqrt(result);
+    return sqrt(global_result);
 }

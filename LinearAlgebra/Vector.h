@@ -13,6 +13,7 @@ class Vector {
         void print() const;
         void add(const Vector &x);
         void setValues(const double &x);
+        void setValues(const std::vector<double> &x);
         void scale(const double &x);
         void zeros();
 
