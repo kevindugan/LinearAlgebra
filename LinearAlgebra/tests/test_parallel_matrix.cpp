@@ -9,16 +9,20 @@ TEST(ParallelMatrix, init_modulo){
     ASSERT_EQ(m.nRows(), 15);
     ASSERT_EQ(m.nCols(), 15);
     std::vector<unsigned int> part = m.getPartitionSize();
-    ASSERT_THAT(part, ElementsAreArray({5, 5, 5}));
+    ASSERT_THAT(part, ElementsAreArray({3, 3, 3, 3, 3}));
 
     IndexRange range = m.getGlobalRowIndexRange();
     std::vector<unsigned int> expected(2);
     if (init.rank() == 0)
-        expected = {0, 5};
+        expected = {0, 3};
     else if (init.rank() == 1)
-        expected = {5, 10};
+        expected = {3, 6};
     else if (init.rank() == 2)
-        expected = {10, 15};
+        expected = {6, 9};
+    else if (init.rank() == 3)
+        expected = {9, 12};
+    else if (init.rank() == 4)
+        expected = {12, 15};
 
     ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 }
@@ -30,16 +34,20 @@ TEST(ParallelMatrix, init_non_modulo){
   ASSERT_EQ(m.nRows(), 16);
   ASSERT_EQ(m.nCols(), 16);
   auto part = m.getPartitionSize();
-  ASSERT_THAT(part, ElementsAreArray({6, 5, 5}));
+  ASSERT_THAT(part, ElementsAreArray({4, 3, 3, 3, 3}));
 
   IndexRange range = m.getGlobalRowIndexRange();
   std::vector<unsigned int> expected(2);
   if (init.rank() == 0)
-    expected = {0, 6};
+    expected = {0, 4};
   else if (init.rank() == 1)
-    expected = {6, 11};
+    expected = {4, 7};
   else if (init.rank() == 2)
-    expected = {11, 16};
+    expected = {7, 10};
+  else if (init.rank() == 3)
+    expected = {10, 13};
+  else if (init.rank() == 4)
+    expected = {13, 16};
 
   ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 
@@ -48,15 +56,19 @@ TEST(ParallelMatrix, init_non_modulo){
   ASSERT_EQ(w.nRows(), 128);
   ASSERT_EQ(w.nCols(), 128);
   part = w.getPartitionSize();
-  ASSERT_THAT(part, ElementsAreArray({43, 43, 42}));
+  ASSERT_THAT(part, ElementsAreArray({26, 26, 26, 25, 25}));
 
   range = w.getGlobalRowIndexRange();
   if (init.rank() == 0)
-    expected = {0, 43};
+    expected = {0, 26};
   else if (init.rank() == 1)
-    expected = {43, 86};
+    expected = {26, 52};
   else if (init.rank() == 2)
-    expected = {86, 128};
+    expected = {52, 78};
+  else if (init.rank() == 3)
+    expected = {78, 103};
+  else if (init.rank() == 4)
+    expected = {103, 128};
 
   ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 }

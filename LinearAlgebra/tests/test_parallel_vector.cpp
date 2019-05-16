@@ -80,7 +80,6 @@ TEST(ParallelVector, set){
   for (auto item : vals)
     expected_norm += item * item;
   expected_norm = sqrt(expected_norm);
-  std::cout << "NORM: " << expected_norm << std::endl;
 
   v.setValues(vals);
   ASSERT_DOUBLE_EQ(v.length(), expected_norm);
