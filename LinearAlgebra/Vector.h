@@ -19,7 +19,8 @@ class Vector {
 
         unsigned int size() const {return this->global_size;}
 
-        double getLocal(const unsigned int index) const;
+        unsigned int findRankWithIndex(const unsigned int index) const;
+        double getValue(const unsigned int index) const;
 
         double length() const;
 
