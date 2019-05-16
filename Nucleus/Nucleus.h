@@ -16,7 +16,10 @@ class Nucleus : public ::testing::EmptyTestEventListener {
 
     private:
         std::string PrintFullTestCommentIfPresent(const ::testing::TestInfo& test_info);
-        void OutputMessage(std::string message, const unsigned int rank, const unsigned int size) const;
+        void OutputMessage(std::string message,
+                           const unsigned int rank,
+                           const unsigned int size,
+                           const bool outputAllProcs = false) const;
 };
 
 #endif // NUCLEUS_H_12LO

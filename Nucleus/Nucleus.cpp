@@ -10,41 +10,35 @@ void Nucleus::OnTestStart(const ::testing::TestInfo& info) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   int nDigits = floor(log10(size) + 1);
-  std::string rankString = std::to_string(rank);
-  rankString.insert(rankString.begin(), nDigits-rankString.length(), ' ');
-  rankString = "[Rank " + rankString + " ]";
+  std::string procString = std::to_string(size);
+  procString.insert(procString.begin(), nDigits-procString.length(), ' ');
+  procString = "[" + procString + " Procs]";
 
   // Setup start info
   std::string message = "\e[32m";
-  message += rankString + "[ RUN      ] \e[0m";
+  message += procString + "[ RUN      ] \e[0m";
   message += info.test_case_name();
   message += ".";
   message += info.name();
   message += "\n";
 
-/*
-  if (rank == 0){
-    std::cout << message.c_str() << std::flush;
-    for (unsigned int proc = 1; proc < size; proc++){
-      MPI_Recv(&message[0], message.length(), MPI_CHAR, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      std::cout << message.c_str() << std::flush;
-    }
-  } else {
-    MPI_Send(message.data(), message.length(), MPI_CHAR, 0, 0, MPI_COMM_WORLD);
-  }
-*/
   this->OutputMessage(message, rank, size);
 }
 
-void Nucleus::OutputMessage(std::string message, const unsigned int rank, const unsigned int size) const {
+void Nucleus::OutputMessage(std::string message,
+                            const unsigned int rank,
+                            const unsigned int size,
+                            const bool outputAllProcs) const {
   if (rank == 0){
     std::cout << message.c_str() << std::flush;
-    for (unsigned int proc = 1; proc < size; proc++){
-      MPI_Recv(&message[0], message.length(), MPI_CHAR, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      std::cout << message.c_str() << std::flush;
-    }
+    if (outputAllProcs)
+      for (unsigned int proc = 1; proc < size; proc++){
+        MPI_Recv(&message[0], message.length(), MPI_CHAR, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        std::cout << message.c_str() << std::flush;
+      }
   } else {
-    MPI_Send(message.data(), message.length(), MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+    if (outputAllProcs)
+      MPI_Send(message.data(), message.length(), MPI_CHAR, 0, 0, MPI_COMM_WORLD);
   }
 }
 
@@ -80,15 +74,15 @@ void Nucleus::OnTestEnd(const ::testing::TestInfo& info) {
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   int nDigits = floor(log10(size) + 1);
-  std::string rankString = std::to_string(rank);
-  rankString.insert(rankString.begin(), nDigits-rankString.length(), ' ');
-  rankString = "[Rank " + rankString + " ]";
+  std::string procString = std::to_string(size);
+  procString.insert(procString.begin(), nDigits-procString.length(), ' ');
+  procString = "[" + procString + " Procs]";
 
   std::string message;
   if (info.result()->Passed()){
-    message = "\e[32m" + rankString + "[       OK ] \e[0m";
+    message = "\e[32m" + procString + "[       OK ] \e[0m";
   } else {
-    message = "\e[31m" + rankString + "[  FAILED  ] \e[0m";
+    message = "\e[31m" + procString + "[  FAILED  ] \e[0m";
   }
   message += info.test_case_name();
   message += ".";
@@ -133,10 +127,7 @@ void Nucleus::OnTestPartResult(const ::testing::TestPartResult& result) {
   message += result.message();
   message += "\n";
 
-
-
-
-  this->OutputMessage(message, rank, size);
+  this->OutputMessage(message, rank, size, true);
 
 }
 
