@@ -85,3 +85,23 @@ TEST(ParallelVector, set){
   v.setValues(vals);
   ASSERT_DOUBLE_EQ(v.length(), expected_norm);
 }
+
+TEST(ParallelVector, getRankWithIndex){
+  LinearAlgebra init;
+  Vector v(8, init);
+
+  std::vector<unsigned int> ranks = {0, 0, 0, 1, 1, 1, 2, 2};
+  for (unsigned int i = 0; i < v.size(); i++)
+    ASSERT_EQ(v.findRankWithIndex(i), ranks[i]);
+}
+
+TEST(ParallelVector, get){
+  LinearAlgebra init;
+  Vector v(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  v.setValues(vals);
+
+  for (unsigned int i = 0; i < vals.size(); i++)
+    ASSERT_DOUBLE_EQ(v.getValue(i), vals[i]);
+}
