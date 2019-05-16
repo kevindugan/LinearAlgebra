@@ -9,10 +9,11 @@ addons:
       - g++-7
       - cmake
       - libopenmpi-dev
+      - openmpi-bin
 
-before_script:
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+# before_script:
+#   - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+#   - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
 
 script:
   - mkdir build && cd build
