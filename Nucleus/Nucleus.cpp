@@ -105,7 +105,38 @@ void Nucleus::OnTestEnd(const ::testing::TestInfo& info) {
 void Nucleus::OnTestPartResult(const ::testing::TestPartResult& result) {
   if (result.type() == ::testing::TestPartResult::kSuccess)
     return;
-  std::cout << "Part Result" << std::endl;
+
+
+  int rank, size;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  int nDigits = floor(log10(size) + 1);
+  std::string rankString = std::to_string(rank);
+  rankString.insert(rankString.begin(), nDigits-rankString.length(), ' ');
+  rankString = "[Rank " + rankString + " ]";
+
+  std::string message;
+  message += "\e[31m" + rankString + "\e[0m\n";
+
+  std::string file_name(result.file_name() == NULL ? "unknown file" : result.file_name());
+  message += file_name + ":";
+  if (result.line_number() > 0)
+    message += std::to_string(result.line_number()) + ":";
+  message += " ";
+  if (result.type() == ::testing::TestPartResult::kFatalFailure)
+    message += "Failure\n";
+  else if (result.type() == ::testing::TestPartResult::kSuccess)
+    message += "Success";
+  else
+    message += "Unknown result type";
+  
+  message += result.message();
+  message += "\n";
+
+
+
+
+  this->OutputMessage(message, rank, size);
 
 }
 
