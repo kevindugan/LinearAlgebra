@@ -122,7 +122,6 @@ TEST(ParallelMatrix, set){
   ASSERT_DOUBLE_EQ(m.frobeniusNorm(), expected_norm);
 }
 
-/*
 TEST(ParallelMatrix, mat_vec_mult){
   LinearAlgebra init;
   Matrix m(6, 6, init);
@@ -137,7 +136,7 @@ TEST(ParallelMatrix, mat_vec_mult){
 
                 std::vector<double> v_vals = {5.1,   0.027, 0.027, 0.032, 2.3,   3.1};
 
-  std::vector<double> expected_v = {37.999304, 639057, 10.083544, 26.598234, 32.438034, 12.881064};
+  std::vector<double> expected_v = {37.999304, 63.9057, 21.650344, 26.598234, 32.438034, 13.191064};
 
   Vector expected(6, init);
 
@@ -153,6 +152,5 @@ TEST(ParallelMatrix, mat_vec_mult){
     ASSERT_DOUBLE_EQ(result.getValue(i), expected_v[i]);
 
   Vector diff = result.add(-1.0, expected);
-  ASSERT_DOUBLE_EQ(diff.length(), 0.0);
+  EXPECT_NEAR(diff.length(), 0.0, 1.0E-12);
 }
-*/

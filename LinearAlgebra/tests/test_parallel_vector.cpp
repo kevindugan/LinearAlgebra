@@ -105,6 +105,21 @@ TEST(ParallelVector, get){
     ASSERT_DOUBLE_EQ(v.getValue(i), vals[i]);
 }
 
+TEST(ParallelVector, get_global){
+  LinearAlgebra init;
+  Vector v(15, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2, 9.2, 4.7};
+  v.setValues(vals);
+
+  std::vector<double> result(v.size());
+  v.getGlobalValues(result);
+
+  ASSERT_EQ(result.size(), vals.size());
+  for (unsigned int i = 0; i < result.size(); i++)
+    ASSERT_DOUBLE_EQ(result[i], vals[i]);
+}
+
 TEST(ParallelVector, copy){
   LinearAlgebra init;
   Vector source(13, init);

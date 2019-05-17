@@ -136,6 +136,16 @@ double Vector::getValue(const unsigned int index) const {
     return result;
 }
 
+void Vector::getGlobalValues(std::vector<double> &global_values) const {
+    Nucleus_ASSERT_EQ(this->global_size, global_values.size())
+    std::vector<int> block_sizes = this->getPartitionSize();
+    std::vector<int> offset(this->linalg->size());
+    for (int i = 0, sum = 0; i < offset.size(); i++, sum+=block_sizes[i-1])
+        offset[i] = sum;
+
+    MPI_Allgatherv(this->values, this->local_size, MPI_DOUBLE, global_values.data(), block_sizes.data(), offset.data(), MPI_DOUBLE, MPI_COMM_WORLD);
+}
+
 Vector Vector::add(const Vector &other) const {
     return this->add(1.0, other);
 }
