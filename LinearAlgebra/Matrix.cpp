@@ -83,5 +83,17 @@ Vector Matrix::mult(const Vector &other) const{
     Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
     Vector result(this->nGlobalRows, *this->linalg);
 
+    std::vector<double> global_values(other.size());
+    other.getGlobalValues(global_values);
+
+    std::vector<double> result_values(result.size());
+    for (unsigned int row = 0, global_row = this->globalRowIndexRange.begin; row < this->nLocalRows; row++, global_row++){
+        for (unsigned int col = 0; col < this->nLocalColumns; col++){
+            result_values[global_row] += this->matrixStorage[row][col] * global_values[col];
+        }
+    }
+
+  result.setValues(result_values);
+  
     return result;
 }
