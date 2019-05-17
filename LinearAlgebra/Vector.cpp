@@ -27,6 +27,32 @@ Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
         this->values[i] = 0.0;
 }
 
+Vector::Vector(const Vector &other) {
+    this->local_size = other.local_size;
+    this->global_size = other.global_size;
+    this->globalIndexRange = other.globalIndexRange;
+    this->linalg = other.linalg;
+
+    this->values = new double[this->local_size];
+    for (unsigned int i = 0; i < this->local_size; i++)
+        this->values[i] = other.values[i];
+}
+
+Vector& Vector::operator=(const Vector &other) {
+    if (this != &other){
+        this->local_size = other.local_size;
+        this->global_size = other.global_size;
+        this->globalIndexRange = other.globalIndexRange;
+        this->linalg = other.linalg;
+
+        delete[] this->values;
+        this->values = new double[this->local_size];
+        for (unsigned int i = 0; i < this->local_size; i++)
+            this->values[i] = other.values[i];
+    }
+    return *this;
+}
+
 Vector::~Vector(){
     delete[] this->values;
 }
@@ -53,8 +79,8 @@ void Vector::print() const {
     }
 }
 
-std::vector<unsigned int> Vector::getPartitionSize() const {
-    std::vector<unsigned int> result(this->linalg->size());
+std::vector<int> Vector::getPartitionSize() const {
+    std::vector<int> result(this->linalg->size());
     MPI_Allgather(&this->local_size, 1, MPI_UNSIGNED, result.data(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
     return result;
 }
@@ -110,11 +136,21 @@ double Vector::getValue(const unsigned int index) const {
     return result;
 }
 
-void Vector::add(const Vector &x){
-    linalg_assert(this->global_size == x.size())
+Vector Vector::add(const Vector &other) const {
+    return this->add(1.0, other);
+}
+
+Vector Vector::add(const double &scale, const Vector &other) const {
+    Nucleus_ASSERT_EQ(this->global_size, other.size())
+    Vector result(this->global_size, *this->linalg);
+
+    std::vector<double> vals(this->global_size);
+    for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
+        vals[j] = this->values[i] + scale * other.values[i];
+
+    result.setValues(vals);
     
-    for (unsigned int i = 0; i < this->local_size; i++)
-        this->values[i] += x.getValue(i);
+    return result;
 }
 
 double Vector::length() const {

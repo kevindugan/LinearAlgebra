@@ -78,3 +78,10 @@ double Matrix::frobeniusNorm() const {
 
     return sqrt(global_result);
 }
+
+Vector Matrix::mult(const Vector &other) const{
+    Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
+    Vector result(this->nGlobalRows, *this->linalg);
+
+    return result;
+}
