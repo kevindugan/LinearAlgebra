@@ -130,7 +130,6 @@ TEST(ParallelVector, copy){
 
 }
 
-/*
 TEST(ParallelVector, add){
   LinearAlgebra init;
   Vector one(13, init);
@@ -140,14 +139,7 @@ TEST(ParallelVector, add){
   one.setValues(vals);
   two.setValues(vals);
 
-  if (init.rank() == 0){
-    std::cout << "Base:   ";
-    for (const auto &item : vals)
-      std::cout << std::setw(6) << item << ", ";
-    std::cout << std::endl;
-  }
   Vector result = one.add(two);
-  result.print();
   for (unsigned int i = 0; i < vals.size(); i++)
     ASSERT_DOUBLE_EQ(result.getValue(i), 2.0 * vals[i]);
 
@@ -159,4 +151,3 @@ TEST(ParallelVector, add){
   for (unsigned int i = 0; i < vals.size(); i++)
     ASSERT_DOUBLE_EQ(result.getValue(i), vals[i] + 4.1 * vals[i]);
 }
-*/
