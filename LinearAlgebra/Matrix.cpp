@@ -54,10 +54,10 @@ void Matrix::setValues(const double &x) {
 
 void Matrix::setValues(const std::vector<std::vector<double>>& x){
     Nucleus_ASSERT_EQ(x.size(), this->nGlobalRows)
-    for (unsigned int row = 0; row < this->nLocalRows; row++){
-        Nucleus_ASSERT_EQ(x[row].size(), this->nGlobalColumns)
+    for (unsigned int loc_row = 0, glob_row = this->globalRowIndexRange.begin; loc_row < this->nLocalRows; loc_row++, glob_row++){
+        Nucleus_ASSERT_EQ(x[glob_row].size(), this->nGlobalColumns)
         for (unsigned int col = 0; col < this->nLocalColumns; col++)
-            this->matrixStorage[row][col] = x[row][col];
+            this->matrixStorage[loc_row][col] = x[glob_row][col];
     }
 }
 
