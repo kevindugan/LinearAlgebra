@@ -25,6 +25,7 @@ class Vector {
 
         unsigned int findRankWithIndex(const unsigned int index) const;
         double getValue(const unsigned int index) const;
+        void getGlobalValues(std::vector<double> &global_values) const;
 
         double length() const;
 
