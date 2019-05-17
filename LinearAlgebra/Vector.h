@@ -1,33 +1,35 @@
-
+#ifndef VECTOR_H_C99B
+#define VECTOR_H_C99B
 #include "LinearAlgebra.h"
 #include <vector>
 #include <utility>
-
-// Index that is at the beginning of the range and and index one past the end
-struct IndexRange {
-    IndexRange() : begin(0), end(1) {}
-    IndexRange(unsigned int a, unsigned int b) : begin(a), end(b) {}
-    unsigned int begin, end;
-};
+#include "Partitioning.h"
 
 class Vector {
     public:
         Vector(unsigned int size, const LinearAlgebra& linalg);
+        Vector(const Vector &other);
+        Vector& operator=(const Vector &other);
         virtual ~Vector();
 
         void print() const;
-        void add(const Vector &x);
         void setValues(const double &x);
+        void setValues(const std::vector<double> &x);
         void scale(const double &x);
         void zeros();
 
+        Vector add(const double &scale, const Vector &other) const;
+        Vector add(const Vector &other) const;
+    
         unsigned int size() const {return this->global_size;}
 
-        double getLocal(const unsigned int index) const;
+        unsigned int findRankWithIndex(const unsigned int index) const;
+        double getValue(const unsigned int index) const;
+        void getGlobalValues(std::vector<double> &global_values) const;
 
         double length() const;
 
-        std::vector<unsigned int> getPartitionSize() const;
+        std::vector<int> getPartitionSize() const;
 
         IndexRange getGlobalIndexRange() const {return this->globalIndexRange;}
         
@@ -37,3 +39,5 @@ class Vector {
         const LinearAlgebra* linalg;
         IndexRange globalIndexRange;
 };
+
+#endif // VECTOR_H_C99B
