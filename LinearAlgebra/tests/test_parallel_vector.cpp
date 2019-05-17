@@ -8,7 +8,7 @@ TEST(ParallelVector, init_modulo){
 
   ASSERT_EQ(v.size(), 15);
   ASSERT_DOUBLE_EQ(v.length(), 0.0);
-  std::vector<unsigned int> part = v.getPartitionSize();
+  std::vector<int> part = v.getPartitionSize();
   ASSERT_THAT(part, ElementsAreArray({5, 5, 5}));
 
   IndexRange range = v.getGlobalIndexRange();
@@ -104,3 +104,59 @@ TEST(ParallelVector, get){
   for (unsigned int i = 0; i < vals.size(); i++)
     ASSERT_DOUBLE_EQ(v.getValue(i), vals[i]);
 }
+
+TEST(ParallelVector, copy){
+  LinearAlgebra init;
+  Vector source(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  source.setValues(vals);
+
+  Vector result1 = source;
+  ASSERT_EQ(result1.size(), source.size());
+  for (unsigned int i = 0; i < result1.size(); i++)
+    EXPECT_DOUBLE_EQ(result1.getValue(i), vals[i]);
+
+  Vector result2(source);
+  ASSERT_EQ(result2.size(), source.size());
+  for (unsigned int i = 0; i < result2.size(); i++)
+    EXPECT_DOUBLE_EQ(result2.getValue(i), vals[i]);
+
+  Vector result3(1, init);
+  result3 = source;
+  ASSERT_EQ(result3.size(), source.size());
+  for (unsigned int i = 0; i < result3.size(); i++)
+    EXPECT_DOUBLE_EQ(result3.getValue(i), vals[i]);
+
+}
+
+/*
+TEST(ParallelVector, add){
+  LinearAlgebra init;
+  Vector one(13, init);
+  Vector two(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  one.setValues(vals);
+  two.setValues(vals);
+
+  if (init.rank() == 0){
+    std::cout << "Base:   ";
+    for (const auto &item : vals)
+      std::cout << std::setw(6) << item << ", ";
+    std::cout << std::endl;
+  }
+  Vector result = one.add(two);
+  result.print();
+  for (unsigned int i = 0; i < vals.size(); i++)
+    ASSERT_DOUBLE_EQ(result.getValue(i), 2.0 * vals[i]);
+
+  result = one.add(-1.0, two);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    ASSERT_DOUBLE_EQ(result.getValue(i), 0.0);
+
+  result = one.add(4.1, two);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    ASSERT_DOUBLE_EQ(result.getValue(i), vals[i] + 4.1 * vals[i]);
+}
+*/
