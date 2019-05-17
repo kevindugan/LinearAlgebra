@@ -41,7 +41,9 @@ std::tuple<std::string, unsigned int, unsigned int> Nucleus::getMPIprefix(const 
   // Format step info
   std::string stepString;
   if (step.length() == 1){
-    stepString = std::string(step.c_str(), 10);
+    stepString.reserve(10);
+    for (unsigned int i = 0; i < 10; i++)
+      stepString += step;
     stepString = "[" + stepString + "] ";
   } else {
     // stepString = std::toupper(step);
@@ -189,7 +191,24 @@ void Nucleus::OnTestCaseEnd(const ::testing::TestCase& test_case) {
 }
 
 void Nucleus::OnTestIterationStart(const ::testing::UnitTest& unit_test, int iteration){
-  
+  auto prefix = this->getMPIprefix(color::GREEN, "=", align::FULL);
+
+  std::string message = std::get<0>(prefix);
+  message += "Running ";
+  message += std::to_string(unit_test.test_to_run_count());
+  if (unit_test.test_to_run_count() == 1)
+    message += " test";
+  else
+    message += " tests";
+  message += " from ";
+  message += std::to_string(unit_test.test_case_to_run_count());
+  if (unit_test.test_to_run_count() == 1)
+    message += " test case";
+  else
+    message += " test cases";
+  message += ".\n";
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
 void Nucleus::OnTestIterationEnd(const ::testing::UnitTest& unit_test, int iteration){

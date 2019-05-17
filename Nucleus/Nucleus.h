@@ -28,7 +28,7 @@ class Nucleus : public ::testing::EmptyTestEventListener {
                            const bool outputAllProcs = false) const;
 
         enum color {GREEN, RED, YELLOW};
-        enum align {LEFT, RIGHT, CENTER};
+        enum align {LEFT, RIGHT, CENTER, FULL};
         std::tuple<std::string, unsigned int, unsigned int> getMPIprefix(const color &c, const std::string &step, const align &alignment) const;
  
 };
