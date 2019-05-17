@@ -3,6 +3,7 @@
 #include "LinearAlgebra.h"
 #include <vector>
 #include "Partitioning.h"
+#include "Vector.h"
 
 class Matrix {
 
@@ -21,6 +22,8 @@ class Matrix {
         void setValues(const std::vector<std::vector<double>>& x);
         void zeros();
         double frobeniusNorm() const;
+    
+        Vector mult(const Vector &other) const;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;
