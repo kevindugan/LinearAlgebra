@@ -1,3 +1,6 @@
+#ifndef LINEAR_ALGEBRA_H_A72K
+#define LINEAR_ALGEBRA_H_A72K
+
 #include <mpi.h>
 #include <iostream>
 
@@ -30,3 +33,5 @@ class LinearAlgebra {
         std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << " --- " << left << " != " << right << std::endl; \
         MPI_Abort(MPI_COMM_WORLD, 1); \
     }
+
+#endif // LINEAR_ALGEBRA_H_A72K
