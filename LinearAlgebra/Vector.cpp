@@ -137,22 +137,19 @@ double Vector::getValue(const unsigned int index) const {
 }
 
 Vector Vector::add(const Vector &other) const {
-/*
-    linalg_assert(this->global_size == x.size())
-    
-    for (unsigned int i = 0; i < this->local_size; i++)
-        this->values[i] += x.getValue(i);
-*/
-    Nucleus_ASSERT_EQ(this->global_size, other.size())
-    Vector result(this->global_size, *this->linalg);
-
-    return result;
+    return this->add(1.0, other);
 }
 
 Vector Vector::add(const double &scale, const Vector &other) const {
     Nucleus_ASSERT_EQ(this->global_size, other.size())
     Vector result(this->global_size, *this->linalg);
 
+    std::vector<double> vals(this->global_size);
+    for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
+        vals[j] = this->values[i] + scale * other.values[i];
+
+    result.setValues(vals);
+    
     return result;
 }
 
