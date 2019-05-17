@@ -9,16 +9,16 @@ std::tuple<std::string, unsigned int, unsigned int> Nucleus::getMPIprefix(const 
   std::string colorStart, colorEnd = "";
   switch (c){
     case color::GREEN:
-      colorStart = "\e[32m";
-      colorEnd = "\e[0m";
+      colorStart = "\033[0;32m";
+      colorEnd = "\033[0m";
       break;
     case color::RED:
-      colorStart = "\e[31m";
-      colorEnd = "\e[0m";
+      colorStart = "\033[0;31m";
+      colorEnd = "\033[0m";
       break;
     case color::YELLOW:
-      colorStart = "\e[33m";
-      colorEnd = "\e[0m";
+      colorStart = "\033[0;33m";
+      colorEnd = "\033[0m";
       break;
     default:
       break;
