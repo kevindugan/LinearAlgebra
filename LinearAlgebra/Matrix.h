@@ -17,6 +17,11 @@ class Matrix {
         std::vector<unsigned int> getPartitionSize() const;
         IndexRange getGlobalRowIndexRange() const {return this->globalRowIndexRange;}
 
+        void setValues(const double& x);
+        void setValues(const std::vector<std::vector<double>>& x);
+        void zeros();
+        double frobeniusNorm() const;
+
     private:
         unsigned int nGlobalRows, nGlobalColumns;
         unsigned int nLocalRows, nLocalColumns;

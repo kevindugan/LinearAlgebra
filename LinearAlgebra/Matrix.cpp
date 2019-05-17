@@ -45,3 +45,36 @@ std::vector<unsigned int> Matrix::getPartitionSize() const {
     MPI_Allgather(&this->nLocalRows, 1, MPI_UNSIGNED, result.data(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
     return result;
 }
+
+void Matrix::setValues(const double &x) {
+    for (unsigned int row = 0; row < this->nLocalRows; row++)
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            this->matrixStorage[row][col] = x;
+}
+
+void Matrix::setValues(const std::vector<std::vector<double>>& x){
+    Nucleus_ASSERT_EQ(x.size(), this->nGlobalRows)
+    for (unsigned int row = 0; row < this->nLocalRows; row++){
+        Nucleus_ASSERT_EQ(x[row].size(), this->nGlobalColumns)
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            this->matrixStorage[row][col] = x[row][col];
+    }
+}
+
+void Matrix::zeros() {
+    for (unsigned int row = 0; row < this->nLocalRows; row++)
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            this->matrixStorage[row][col] = 0.0;
+}
+
+double Matrix::frobeniusNorm() const {
+    double local_result = 0.0;
+    for (unsigned int row = 0; row < this->nLocalRows; row++)
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            local_result += this->matrixStorage[row][col] * this->matrixStorage[row][col];
+
+    double global_result = 0.0;
+    MPI_Allreduce(&local_result, &global_result, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+    return sqrt(global_result);
+}
