@@ -183,11 +183,29 @@ void Nucleus::OnTestPartResult(const ::testing::TestPartResult& result) {
 }
 
 void Nucleus::OnTestCaseStart(const ::testing::TestCase& test_case) {
-  // std::cout << "Case Start" << std::endl;
+  auto prefix = this->getMPIprefix(color::GREEN, "-", align::FULL);
+  std::string message = std::get<0>(prefix);
+  message += formatTestCount(test_case.test_to_run_count()) + " from ";
+  message += test_case.name();
+  if (test_case.type_param() != NULL){
+    message += ", where TypeParam = ";
+    message += test_case.type_param();
+  }
+  message += "\n";
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
+
 }
 
 void Nucleus::OnTestCaseEnd(const ::testing::TestCase& test_case) {
-  // std::cout << "Case End" << std::endl;
+  auto prefix = this->getMPIprefix(color::GREEN, "-", align::FULL);
+  std::string message = std::get<0>(prefix);
+  message += formatTestCount(test_case.test_to_run_count());
+  message += " from ";
+  message += test_case.name();
+  message += " (" + std::to_string(test_case.elapsed_time()) + " ms total)\n\n";
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
 void Nucleus::OnTestIterationStart(const ::testing::UnitTest& unit_test, int iteration){
@@ -195,32 +213,85 @@ void Nucleus::OnTestIterationStart(const ::testing::UnitTest& unit_test, int ite
 
   std::string message = std::get<0>(prefix);
   message += "Running ";
-  message += std::to_string(unit_test.test_to_run_count());
-  if (unit_test.test_to_run_count() == 1)
-    message += " test";
-  else
-    message += " tests";
+  message += formatTestCount(unit_test.test_to_run_count());
   message += " from ";
-  message += std::to_string(unit_test.test_case_to_run_count());
-  if (unit_test.test_to_run_count() == 1)
-    message += " test case";
-  else
-    message += " test cases";
+  message += formatTestCaseCount(unit_test.test_case_to_run_count());
   message += ".\n";
 
   this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
+std::string Nucleus::PrintFailedTests(const ::testing::UnitTest& unit_test) {
+  std::string result;
+  if (unit_test.failed_test_count() == 0)
+    return result;
+
+  auto prefix = this->getMPIprefix(color::RED, "failed", align::CENTER);
+
+  for (int i = 0; i < unit_test.total_test_case_count(); i++){
+    const ::testing::TestCase& test_case = *unit_test.GetTestCase(i);
+    if (!test_case.should_run() || (test_case.failed_test_count() == 0))
+      continue;
+    for (int j = 0; j < test_case.total_test_count(); j++){
+      const ::testing::TestInfo& test_info = *test_case.GetTestInfo(j);
+      if (!test_info.should_run() || test_info.result()->Passed())
+        continue;
+      result += std::get<0>(prefix);
+      result += test_case.name();
+      result += ".";
+      result += test_info.name();
+      result += this->PrintFullTestCommentIfPresent(test_info);
+      result += "\n";
+    }
+  }
+
+  return result;
+}
+
 void Nucleus::OnTestIterationEnd(const ::testing::UnitTest& unit_test, int iteration){
-  // std::cout << "Iteration End" << std::endl;
+  auto prefix = this->getMPIprefix(color::GREEN, "=", align::FULL);
+
+  // Print Passed tests
+  std::string message = std::get<0>(prefix);
+  message += formatTestCount(unit_test.test_to_run_count());
+  message += " from ";
+  message += formatTestCaseCount(unit_test.test_case_to_run_count());
+  message += " ran.";
+  message += " (" + std::to_string(unit_test.elapsed_time()) + " ms total)\n";
+  prefix = this->getMPIprefix(color::GREEN, "passed", align::CENTER);
+  message += std::get<0>(prefix);
+  message += formatTestCount(unit_test.successful_test_count());
+  message += ".\n";
+
+  // Print Failed tests
+  if(!unit_test.Passed()){
+    prefix = this->getMPIprefix(color::RED, "failed", align::CENTER);
+    message += std::get<0>(prefix);
+    int test_count = unit_test.failed_test_count();
+    message += formatTestCount(test_count);
+    message += ", listed below:\n";
+    message += this->PrintFailedTests(unit_test);
+    message += "\n  " + std::to_string(test_count) + " FAILED " + (test_count == 1 ? "TEST" : "TESTS") + "\n";
+  }
+  
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
 void Nucleus::OnEnvironmentsSetUpStart(const ::testing::UnitTest& unit_test){
-  // std::cout << "Environment setup" << std::endl;
+  auto prefix = this->getMPIprefix(color::GREEN, "-", align::FULL);
+  std::string message = std::get<0>(prefix);
+  message += "Global test environment set-up.\n";
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
 void Nucleus::OnEnvironmentsTearDownStart(const ::testing::UnitTest& unit_test){
-  // std::cout << "Environment teardown" << std::endl;
+  auto prefix = this->getMPIprefix(color::GREEN, "-", align::FULL);
+  std::string message = std::get<0>(prefix);
+  message += "Global test environment tear-down\n";
+
+  this->OutputMessage(message, std::get<1>(prefix), std::get<2>(prefix));
 }
 
 

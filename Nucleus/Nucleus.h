@@ -22,6 +22,7 @@ class Nucleus : public ::testing::EmptyTestEventListener {
 
     private:
         std::string PrintFullTestCommentIfPresent(const ::testing::TestInfo& test_info);
+        std::string PrintFailedTests(const ::testing::UnitTest& unit_test);
         void OutputMessage(std::string message,
                            const unsigned int rank,
                            const unsigned int size,
@@ -30,7 +31,15 @@ class Nucleus : public ::testing::EmptyTestEventListener {
         enum color {GREEN, RED, YELLOW};
         enum align {LEFT, RIGHT, CENTER, FULL};
         std::tuple<std::string, unsigned int, unsigned int> getMPIprefix(const color &c, const std::string &step, const align &alignment) const;
+
  
+};
+
+static auto formatTestCount = [](int count) -> std::string {
+    return std::to_string(count) + " " + (count == 1 ? "test" : "tests"); 
+};
+static auto formatTestCaseCount = [](int count) -> std::string {
+    return std::to_string(count) + " " + (count == 1 ? "test case" : "test cases");
 };
 
 #endif // NUCLEUS_H_12LO
