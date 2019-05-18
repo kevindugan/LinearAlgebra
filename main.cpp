@@ -1,5 +1,5 @@
 
-#include "LinearAlgebra/Vector.h"
+#include "Vector.h"
 #include "math.h"
 
 int main(int argc, char* argv[]) {
