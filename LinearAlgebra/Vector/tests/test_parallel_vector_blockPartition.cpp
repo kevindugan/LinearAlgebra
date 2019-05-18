@@ -12,15 +12,15 @@ TEST(ParallelVector_BlockPartition, init_modulo){
   ASSERT_THAT(part, ElementsAreArray({5, 5, 5}));
 
   IndexRange range = v.getGlobalIndexRange();
-  std::vector<unsigned int> expected(2);
+  std::vector<unsigned int> expected(3);
   if (init.rank() == 0)
-    expected = {0, 5};
+    expected = {0, 5, 1};
   else if (init.rank() == 1)
-    expected = {5, 10};
+    expected = {5, 10, 1};
   else if (init.rank() == 2)
-    expected = {10, 15};
+    expected = {10, 15, 1};
 
-  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
+  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end, range.skip}));
 }
 
 TEST(ParallelVector_BlockPartition, init_non_modulo){
@@ -33,15 +33,15 @@ TEST(ParallelVector_BlockPartition, init_non_modulo){
   ASSERT_THAT(part, ElementsAreArray({6, 5, 5}));
 
   IndexRange range = v.getGlobalIndexRange();
-  std::vector<unsigned int> expected(2);
+  std::vector<unsigned int> expected(3);
   if (init.rank() == 0)
-    expected = {0, 6};
+    expected = {0, 6, 1};
   else if (init.rank() == 1)
-    expected = {6, 11};
+    expected = {6, 11, 1};
   else if (init.rank() == 2)
-    expected = {11, 16};
+    expected = {11, 16, 1};
 
-  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
+  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end, range.skip}));
 
   Vector_BlockPartition w(128, init);
 
@@ -52,13 +52,13 @@ TEST(ParallelVector_BlockPartition, init_non_modulo){
 
   range = w.getGlobalIndexRange();
   if (init.rank() == 0)
-    expected = {0, 43};
+    expected = {0, 43, 1};
   else if (init.rank() == 1)
-    expected = {43, 86};
+    expected = {43, 86, 1};
   else if (init.rank() == 2)
-    expected = {86, 128};
+    expected = {86, 128, 1};
 
-  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
+  ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end, range.skip}));
 }
 
 TEST(ParallelVector_BlockPartition, zero_entries){
