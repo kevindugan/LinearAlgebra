@@ -1,16 +1,16 @@
-#ifndef VECTOR_H_C99B
-#define VECTOR_H_C99B
+#ifndef VECTOR_BLOCK_PARTITION_H_C99B
+#define VECTOR_BLOCK_PARTITION_H_C99B
 #include "LinearAlgebra.h"
 #include <vector>
 #include <utility>
 #include "Partitioning.h"
 
-class Vector {
+class Vector_BlockPartition {
     public:
-        Vector(unsigned int size, const LinearAlgebra& linalg);
-        Vector(const Vector &other);
-        Vector& operator=(const Vector &other);
-        virtual ~Vector();
+        Vector_BlockPartition(unsigned int size, const LinearAlgebra& linalg);
+        Vector_BlockPartition(const Vector_BlockPartition &other);
+        Vector_BlockPartition& operator=(const Vector_BlockPartition &other);
+        virtual ~Vector_BlockPartition();
 
         void print() const;
         void setValues(const double &x);
@@ -18,8 +18,8 @@ class Vector {
         void scale(const double &x);
         void zeros();
 
-        Vector add(const double &scale, const Vector &other) const;
-        Vector add(const Vector &other) const;
+        Vector_BlockPartition add(const double &scale, const Vector_BlockPartition &other) const;
+        Vector_BlockPartition add(const Vector_BlockPartition &other) const;
     
         unsigned int size() const {return this->global_size;}
 
@@ -40,4 +40,4 @@ class Vector {
         IndexRange globalIndexRange;
 };
 
-#endif // VECTOR_H_C99B
+#endif // VECTOR_BLOCK_PARTITION_H_C99B

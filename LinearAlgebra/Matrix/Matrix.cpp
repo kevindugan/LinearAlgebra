@@ -79,9 +79,9 @@ double Matrix::frobeniusNorm() const {
     return sqrt(global_result);
 }
 
-Vector Matrix::mult(const Vector &other) const{
+Vector_BlockPartition Matrix::mult(const Vector_BlockPartition &other) const{
     Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
-    Vector result(this->nGlobalRows, *this->linalg);
+    Vector_BlockPartition result(this->nGlobalRows, *this->linalg);
 
     std::vector<double> global_values(other.size());
     other.getGlobalValues(global_values);

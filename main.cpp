@@ -1,13 +1,13 @@
 
-#include "Vector.h"
+#include "Vector_BlockPartition.h"
 #include "math.h"
 
 int main(int argc, char* argv[]) {
 
   LinearAlgebra init(&argc, &argv);
   
-  Vector v(15, init);
-  Vector w(15, init);
+  Vector_BlockPartition v(15, init);
+  Vector_BlockPartition w(15, init);
   w.scale(0.01);
 
   v.add(w);

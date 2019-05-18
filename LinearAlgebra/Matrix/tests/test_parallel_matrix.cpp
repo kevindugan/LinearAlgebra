@@ -125,7 +125,7 @@ TEST(ParallelMatrix, set){
 TEST(ParallelMatrix, mat_vec_mult){
   LinearAlgebra init;
   Matrix m(6, 6, init);
-  Vector v(6, init);
+  Vector_BlockPartition v(6, init);
 
   std::vector<std::vector<double>> m_vals = {{4.3,   0.052, 2.3,   3.1,   0.042, 5.1},
                                              {8.2,   3.6,   4.3,   8.2,   3.6,   4.3},
@@ -138,19 +138,19 @@ TEST(ParallelMatrix, mat_vec_mult){
 
   std::vector<double> expected_v = {37.999304, 63.9057, 21.650344, 26.598234, 32.438034, 13.191064};
 
-  Vector expected(6, init);
+  Vector_BlockPartition expected(6, init);
 
   m.setValues(m_vals);
   v.setValues(v_vals);
   expected.setValues(expected_v);
 
   // Perform Mat Vec Mult
-  Vector result = m.mult(v);
+  Vector_BlockPartition result = m.mult(v);
 
   ASSERT_EQ(result.size(), expected_v.size());
   for (unsigned int i = 0; i < expected_v.size(); i++)
     ASSERT_DOUBLE_EQ(result.getValue(i), expected_v[i]);
 
-  Vector diff = result.add(-1.0, expected);
+  Vector_BlockPartition diff = result.add(-1.0, expected);
   EXPECT_NEAR(diff.length(), 0.0, 1.0E-12);
 }

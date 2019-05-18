@@ -3,7 +3,7 @@
 #include "LinearAlgebra.h"
 #include <vector>
 #include "Partitioning.h"
-#include "Vector.h"
+#include "Vector_BlockPartition.h"
 
 class Matrix {
 
@@ -23,7 +23,7 @@ class Matrix {
         void zeros();
         double frobeniusNorm() const;
     
-        Vector mult(const Vector &other) const;
+        Vector_BlockPartition mult(const Vector_BlockPartition &other) const;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;

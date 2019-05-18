@@ -1,7 +1,7 @@
 
 enable_testing()
 
-add_library(Vector Vector.cpp)
+add_library(Vector Vector_BlockPartition.cpp)
 
 target_include_directories(Vector INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
 
