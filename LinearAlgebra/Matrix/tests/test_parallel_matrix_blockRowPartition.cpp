@@ -1,10 +1,10 @@
 
 #include "Nucleus.h"
-#include "Matrix.h"
+#include "Matrix_BlockRowPartition.h"
 
-TEST(ParallelMatrix, init_modulo){
+TEST(ParallelMatrix_BlockRowPartition, init_modulo){
     LinearAlgebra init;
-    Matrix m(15, 15, init);
+    Matrix_BlockRowPartition m(15, 15, init);
 
     ASSERT_EQ(m.nRows(), 15);
     ASSERT_EQ(m.nCols(), 15);
@@ -27,9 +27,9 @@ TEST(ParallelMatrix, init_modulo){
     ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 }
 
-TEST(ParallelMatrix, init_non_modulo){
+TEST(ParallelMatrix_BlockRowPartition, init_non_modulo){
   LinearAlgebra init;
-  Matrix m(16, 16, init);
+  Matrix_BlockRowPartition m(16, 16, init);
 
   ASSERT_EQ(m.nRows(), 16);
   ASSERT_EQ(m.nCols(), 16);
@@ -51,7 +51,7 @@ TEST(ParallelMatrix, init_non_modulo){
 
   ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 
-  Matrix w(128, 128, init);
+  Matrix_BlockRowPartition w(128, 128, init);
 
   ASSERT_EQ(w.nRows(), 128);
   ASSERT_EQ(w.nCols(), 128);
@@ -73,9 +73,9 @@ TEST(ParallelMatrix, init_non_modulo){
   ASSERT_THAT(expected, ElementsAreArray({range.begin, range.end}));
 }
 
-TEST(ParallelMatrix, zero_entries){
+TEST(ParallelMatrix_BlockRowPartition, zero_entries){
   LinearAlgebra init;
-  Matrix m(128, 128, init);
+  Matrix_BlockRowPartition m(128, 128, init);
 
   m.setValues(0.12);
   ASSERT_NEAR(m.frobeniusNorm(), 15.36, 1.0e-13);
@@ -84,9 +84,9 @@ TEST(ParallelMatrix, zero_entries){
   ASSERT_DOUBLE_EQ(m.frobeniusNorm(), 0.0);
 }
 
-TEST(ParallelMatrix, set){
+TEST(ParallelMatrix_BlockRowPartition, set){
   LinearAlgebra init;
-  Matrix m(23, 23, init);
+  Matrix_BlockRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
                                            {5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 2.3, 3.1, 0.042, 5.1, 0.027, 0.027, 0.032, 6.3, 8.2, 3.6, 0.027, 0.032, 6.3, 8.2, 3.6},
@@ -122,9 +122,9 @@ TEST(ParallelMatrix, set){
   ASSERT_DOUBLE_EQ(m.frobeniusNorm(), expected_norm);
 }
 
-TEST(ParallelMatrix, mat_vec_mult){
+TEST(ParallelMatrix_BlockRowPartition, mat_vec_mult){
   LinearAlgebra init;
-  Matrix m(6, 6, init);
+  Matrix_BlockRowPartition m(6, 6, init);
   Vector_BlockPartition v(6, init);
 
   std::vector<std::vector<double>> m_vals = {{4.3,   0.052, 2.3,   3.1,   0.042, 5.1},

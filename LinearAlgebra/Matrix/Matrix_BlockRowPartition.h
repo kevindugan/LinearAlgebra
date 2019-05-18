@@ -5,13 +5,13 @@
 #include "Partitioning.h"
 #include "Vector_BlockPartition.h"
 
-class Matrix {
+class Matrix_BlockRowPartition {
 
     public:
-        Matrix(unsigned int nRows,
+        Matrix_BlockRowPartition(unsigned int nRows,
                unsigned int nCols,
                const LinearAlgebra& linalg);
-        virtual ~Matrix();
+        virtual ~Matrix_BlockRowPartition();
 
         unsigned int nRows() const {return this->nGlobalRows;}
         unsigned int nCols() const {return this->nGlobalColumns;}

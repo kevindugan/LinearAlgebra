@@ -1,7 +1,7 @@
-#include "Matrix.h"
+#include "Matrix_BlockRowPartition.h"
 #include "math.h"
 
-Matrix::Matrix(unsigned int nRows,
+Matrix_BlockRowPartition::Matrix_BlockRowPartition(unsigned int nRows,
                unsigned int nCols,
                const LinearAlgebra& linalg){
 
@@ -34,25 +34,25 @@ Matrix::Matrix(unsigned int nRows,
     }
 }
 
-Matrix::~Matrix(){
+Matrix_BlockRowPartition::~Matrix_BlockRowPartition(){
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         delete[] this->matrixStorage[row];
     delete[] this->matrixStorage;
 }
 
-std::vector<unsigned int> Matrix::getPartitionSize() const {
+std::vector<unsigned int> Matrix_BlockRowPartition::getPartitionSize() const {
     std::vector<unsigned int> result(this->linalg->size());
     MPI_Allgather(&this->nLocalRows, 1, MPI_UNSIGNED, result.data(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
     return result;
 }
 
-void Matrix::setValues(const double &x) {
+void Matrix_BlockRowPartition::setValues(const double &x) {
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         for (unsigned int col = 0; col < this->nLocalColumns; col++)
             this->matrixStorage[row][col] = x;
 }
 
-void Matrix::setValues(const std::vector<std::vector<double>>& x){
+void Matrix_BlockRowPartition::setValues(const std::vector<std::vector<double>>& x){
     Nucleus_ASSERT_EQ(x.size(), this->nGlobalRows)
     for (unsigned int loc_row = 0, glob_row = this->globalRowIndexRange.begin; loc_row < this->nLocalRows; loc_row++, glob_row++){
         Nucleus_ASSERT_EQ(x[glob_row].size(), this->nGlobalColumns)
@@ -61,13 +61,13 @@ void Matrix::setValues(const std::vector<std::vector<double>>& x){
     }
 }
 
-void Matrix::zeros() {
+void Matrix_BlockRowPartition::zeros() {
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         for (unsigned int col = 0; col < this->nLocalColumns; col++)
             this->matrixStorage[row][col] = 0.0;
 }
 
-double Matrix::frobeniusNorm() const {
+double Matrix_BlockRowPartition::frobeniusNorm() const {
     double local_result = 0.0;
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         for (unsigned int col = 0; col < this->nLocalColumns; col++)
@@ -79,7 +79,7 @@ double Matrix::frobeniusNorm() const {
     return sqrt(global_result);
 }
 
-Vector_BlockPartition Matrix::mult(const Vector_BlockPartition &other) const{
+Vector_BlockPartition Matrix_BlockRowPartition::mult(const Vector_BlockPartition &other) const{
     Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
     Vector_BlockPartition result(this->nGlobalRows, *this->linalg);
 
