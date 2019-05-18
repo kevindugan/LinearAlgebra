@@ -23,7 +23,7 @@ class Matrix_BlockRowPartition {
         void zeros();
         double frobeniusNorm() const;
     
-        Vector_BlockPartition mult(const Vector_BlockPartition &other) const;
+        std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;

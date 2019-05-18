@@ -7,7 +7,7 @@ TEST(ParallelVector_BlockPartition, init_modulo){
   Vector_BlockPartition v(15, init);
 
   ASSERT_EQ(v.size(), 15);
-  ASSERT_DOUBLE_EQ(v.length(), 0.0);
+  ASSERT_DOUBLE_EQ(v.l2norm(), 0.0);
   std::vector<int> part = v.getPartitionSize();
   ASSERT_THAT(part, ElementsAreArray({5, 5, 5}));
 
@@ -28,7 +28,7 @@ TEST(ParallelVector_BlockPartition, init_non_modulo){
   Vector_BlockPartition v(16, init);
 
   ASSERT_EQ(v.size(), 16);
-  ASSERT_DOUBLE_EQ(v.length(), 0.0);
+  ASSERT_DOUBLE_EQ(v.l2norm(), 0.0);
   auto part = v.getPartitionSize();
   ASSERT_THAT(part, ElementsAreArray({6, 5, 5}));
 
@@ -46,7 +46,7 @@ TEST(ParallelVector_BlockPartition, init_non_modulo){
   Vector_BlockPartition w(128, init);
 
   ASSERT_EQ(w.size(), 128);
-  ASSERT_DOUBLE_EQ(w.length(), 0.0);
+  ASSERT_DOUBLE_EQ(w.l2norm(), 0.0);
   part = w.getPartitionSize();
   ASSERT_THAT(part, ElementsAreArray({43, 43, 42}));
 
@@ -66,9 +66,9 @@ TEST(ParallelVector_BlockPartition, zero_entries){
   Vector_BlockPartition v(128, init);
 
   v.setValues(0.12);
-  ASSERT_DOUBLE_EQ(v.length(), 1.3576450198781713);
+  ASSERT_DOUBLE_EQ(v.l2norm(), 1.3576450198781713);
   v.zeros();
-  ASSERT_DOUBLE_EQ(v.length(), 0.0);
+  ASSERT_DOUBLE_EQ(v.l2norm(), 0.0);
 }
 
 TEST(ParallelVector_BlockPartition, set){
@@ -82,7 +82,7 @@ TEST(ParallelVector_BlockPartition, set){
   expected_norm = sqrt(expected_norm);
 
   v.setValues(vals);
-  ASSERT_DOUBLE_EQ(v.length(), expected_norm);
+  ASSERT_DOUBLE_EQ(v.l2norm(), expected_norm);
 }
 
 TEST(ParallelVector_BlockPartition, getRankWithIndex){
@@ -154,15 +154,15 @@ TEST(ParallelVector_BlockPartition, add){
   one.setValues(vals);
   two.setValues(vals);
 
-  Vector_BlockPartition result = one.add(two);
+  std::unique_ptr<AbstractVector> result = one.add(two);
   for (unsigned int i = 0; i < vals.size(); i++)
-    ASSERT_DOUBLE_EQ(result.getValue(i), 2.0 * vals[i]);
+    ASSERT_DOUBLE_EQ(result->getValue(i), 2.0 * vals[i]);
 
   result = one.add(-1.0, two);
   for (unsigned int i = 0; i < vals.size(); i++)
-    ASSERT_DOUBLE_EQ(result.getValue(i), 0.0);
+    ASSERT_DOUBLE_EQ(result->getValue(i), 0.0);
 
   result = one.add(4.1, two);
   for (unsigned int i = 0; i < vals.size(); i++)
-    ASSERT_DOUBLE_EQ(result.getValue(i), vals[i] + 4.1 * vals[i]);
+    ASSERT_DOUBLE_EQ(result->getValue(i), vals[i] + 4.1 * vals[i]);
 }

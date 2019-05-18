@@ -145,12 +145,12 @@ TEST(ParallelMatrix_BlockRowPartition, mat_vec_mult){
   expected.setValues(expected_v);
 
   // Perform Mat Vec Mult
-  Vector_BlockPartition result = m.mult(v);
+  std::unique_ptr<AbstractVector> result = m.mult(v);
 
-  ASSERT_EQ(result.size(), expected_v.size());
+  ASSERT_EQ(result->size(), expected_v.size());
   for (unsigned int i = 0; i < expected_v.size(); i++)
-    ASSERT_DOUBLE_EQ(result.getValue(i), expected_v[i]);
+    ASSERT_DOUBLE_EQ(result->getValue(i), expected_v[i]);
 
-  Vector_BlockPartition diff = result.add(-1.0, expected);
-  EXPECT_NEAR(diff.length(), 0.0, 1.0E-12);
+  std::unique_ptr<AbstractVector> diff = result->add(-1.0, expected);
+  EXPECT_NEAR(diff->l2norm(), 0.0, 1.0E-12);
 }

@@ -79,21 +79,21 @@ double Matrix_BlockRowPartition::frobeniusNorm() const {
     return sqrt(global_result);
 }
 
-Vector_BlockPartition Matrix_BlockRowPartition::mult(const Vector_BlockPartition &other) const{
+std::unique_ptr<AbstractVector> Matrix_BlockRowPartition::mult(const AbstractVector &other) const{
     Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
-    Vector_BlockPartition result(this->nGlobalRows, *this->linalg);
+    std::unique_ptr<AbstractVector> result = std::make_unique<Vector_BlockPartition>(this->nGlobalRows, *this->linalg);
 
     std::vector<double> global_values(other.size());
     other.getGlobalValues(global_values);
 
-    std::vector<double> result_values(result.size());
+    std::vector<double> result_values(result->size());
     for (unsigned int row = 0, global_row = this->globalRowIndexRange.begin; row < this->nLocalRows; row++, global_row++){
         for (unsigned int col = 0; col < this->nLocalColumns; col++){
             result_values[global_row] += this->matrixStorage[row][col] * global_values[col];
         }
     }
 
-  result.setValues(result_values);
+    result->setValues(result_values);
   
     return result;
 }

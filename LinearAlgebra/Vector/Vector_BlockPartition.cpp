@@ -146,24 +146,28 @@ void Vector_BlockPartition::getGlobalValues(std::vector<double> &global_values) 
     MPI_Allgatherv(this->values, this->local_size, MPI_DOUBLE, global_values.data(), block_sizes.data(), offset.data(), MPI_DOUBLE, MPI_COMM_WORLD);
 }
 
-Vector_BlockPartition Vector_BlockPartition::add(const Vector_BlockPartition &other) const {
+std::unique_ptr<AbstractVector> Vector_BlockPartition::add(const AbstractVector &other) const {
     return this->add(1.0, other);
 }
 
-Vector_BlockPartition Vector_BlockPartition::add(const double &scale, const Vector_BlockPartition &other) const {
+double Vector_BlockPartition::getLocalValue(const unsigned int local_index) const {
+    return this->values[local_index];
+}
+
+std::unique_ptr<AbstractVector> Vector_BlockPartition::add(const double &scale, const AbstractVector &other) const {
     Nucleus_ASSERT_EQ(this->global_size, other.size())
-    Vector_BlockPartition result(this->global_size, *this->linalg);
+    std::unique_ptr<AbstractVector> result = std::make_unique<Vector_BlockPartition>(this->global_size, *this->linalg);
 
     std::vector<double> vals(this->global_size);
     for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
-        vals[j] = this->values[i] + scale * other.values[i];
+        vals[j] = this->values[i] + scale * other.getLocalValue(i);
 
-    result.setValues(vals);
+    result->setValues(vals);
     
     return result;
 }
 
-double Vector_BlockPartition::length() const {
+double Vector_BlockPartition::l2norm() const {
     double local_result = 0.0;
     for (unsigned int i = 0; i < this->local_size; i++)
         local_result += this->values[i] * this->values[i];

@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
   v.add(w);
   v.print();
 
-  double norm = v.length();
+  double norm = v.l2norm();
 
   if (init.rank() == 0){
     linalg_assert( fabs(norm - 32.1776552906) < 1.0e-6 )
