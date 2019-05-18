@@ -79,7 +79,7 @@ double Matrix_BlockRowPartition::frobeniusNorm() const {
     return sqrt(global_result);
 }
 
-std::unique_ptr<AbstractVector> Matrix_BlockRowPartition::mult(const AbstractVector &other) const{
+std::unique_ptr<AbstractVector> Matrix_BlockRowPartition::mult(const AbstractVector &other) const {
     Nucleus_ASSERT_EQ(this->nGlobalColumns, other.size())
     std::unique_ptr<AbstractVector> result = std::make_unique<Vector_BlockPartition>(this->nGlobalRows, *this->linalg);
 

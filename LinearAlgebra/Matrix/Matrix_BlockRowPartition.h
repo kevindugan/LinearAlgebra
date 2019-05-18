@@ -1,11 +1,10 @@
 #ifndef MATRIX_H_0C9S
 #define MATRIX_H_0C9S
-#include "LinearAlgebra.h"
-#include <vector>
-#include "Partitioning.h"
+
+#include "AbstractMatrix.h"
 #include "Vector_BlockPartition.h"
 
-class Matrix_BlockRowPartition {
+class Matrix_BlockRowPartition : public AbstractMatrix {
 
     public:
         Matrix_BlockRowPartition(unsigned int nRows,
@@ -13,17 +12,18 @@ class Matrix_BlockRowPartition {
                const LinearAlgebra& linalg);
         virtual ~Matrix_BlockRowPartition();
 
-        unsigned int nRows() const {return this->nGlobalRows;}
-        unsigned int nCols() const {return this->nGlobalColumns;}
-        std::vector<unsigned int> getPartitionSize() const;
+        unsigned int nRows() const override {return this->nGlobalRows;}
+        unsigned int nCols() const override {return this->nGlobalColumns;}
+        std::vector<unsigned int> getPartitionSize() const override;
         IndexRange getGlobalRowIndexRange() const {return this->globalRowIndexRange;}
 
-        void setValues(const double& x);
-        void setValues(const std::vector<std::vector<double>>& x);
-        void zeros();
-        double frobeniusNorm() const;
+        void setValues(const double& x) override;
+        void setValues(const std::vector<std::vector<double>>& x) override;
+        void zeros() override;
+        
+        double frobeniusNorm() const override;
     
-        std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const;
+        std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const override;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;
