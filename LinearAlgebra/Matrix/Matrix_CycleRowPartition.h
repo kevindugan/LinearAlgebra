@@ -21,6 +21,9 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
         void setValues(const std::vector<std::vector<double>>& x) override;
         void zeros() override;
 
+        unsigned int findRankWithIndex(const unsigned int index) const override;
+        double getValue(const unsigned int row, const unsigned int col) const override;
+
         double frobeniusNorm() const override;
 
         std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const override;

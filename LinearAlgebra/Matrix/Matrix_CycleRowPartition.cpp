@@ -65,6 +65,26 @@ void Matrix_CycleRowPartition::zeros() {
             this->matrixStorage[i][j] = 0.0;
 }
 
+unsigned int Matrix_CycleRowPartition::findRankWithIndex(const unsigned int index) const {
+    Nucleus_ASSERT_LT(index, this->nGlobalRows)
+    return index % this->linalg->size();
+}
+
+double Matrix_CycleRowPartition::getValue(const unsigned int row, const unsigned int col) const {
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+    Nucleus_ASSERT_LT(col, this->nGlobalColumns)
+
+    int indexOnRank = this->findRankWithIndex(row);
+    
+    double result;
+    if (indexOnRank == this->linalg->rank())
+        result = this->matrixStorage[row / this->linalg->size()][col];
+
+    MPI_Bcast(&result, 1, MPI_DOUBLE, indexOnRank, MPI_COMM_WORLD);
+
+    return result;
+}
+
 double Matrix_CycleRowPartition::frobeniusNorm() const {
     double local_result = 0.0;
     for (unsigned int i = 0; i < this->nLocalRows; i++)

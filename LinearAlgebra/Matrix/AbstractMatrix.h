@@ -15,6 +15,9 @@ class AbstractMatrix {
         virtual void setValues(const std::vector<std::vector<double>> &x) = 0;
         virtual void zeros() = 0;
 
+        virtual unsigned int findRankWithIndex(const unsigned int index) const = 0;
+        virtual double getValue(const unsigned int row, const unsigned int col) const = 0;
+
         virtual double frobeniusNorm() const = 0;
 
         virtual std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const = 0;

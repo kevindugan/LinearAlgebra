@@ -67,6 +67,36 @@ void Matrix_BlockRowPartition::zeros() {
             this->matrixStorage[row][col] = 0.0;
 }
 
+unsigned int Matrix_BlockRowPartition::findRankWithIndex(const unsigned int index) const {
+    float ratio = float(this->nGlobalRows) / float(this->linalg->size());
+    unsigned int splitRank = this->nGlobalRows - this->linalg->size() * floor( ratio );
+    unsigned int splitIndex = splitRank * ceil(ratio);
+    unsigned int ownerProc;
+    if (index < splitIndex)
+        ownerProc = floor( index / ceil(ratio) );
+    else {
+        unsigned int offset = splitRank * ceil(ratio);
+        ownerProc = floor( (index - offset) / floor(ratio) ) + splitRank;
+    }
+
+    return ownerProc;
+}
+
+double Matrix_BlockRowPartition::getValue(const unsigned int row, const unsigned int col) const {
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+    Nucleus_ASSERT_LT(col, this->nGlobalColumns)
+
+    unsigned int indexOnRank = this->findRankWithIndex(row);
+
+    double result;
+    if (indexOnRank == this->linalg->rank())
+        result = this->matrixStorage[row - this->globalRowIndexRange.begin][col];
+
+    MPI_Bcast(&result, 1, MPI_DOUBLE, indexOnRank, MPI_COMM_WORLD);
+
+    return result;
+}
+
 double Matrix_BlockRowPartition::frobeniusNorm() const {
     double local_result = 0.0;
     for (unsigned int row = 0; row < this->nLocalRows; row++)

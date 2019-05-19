@@ -20,6 +20,9 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
         void setValues(const double& x) override;
         void setValues(const std::vector<std::vector<double>>& x) override;
         void zeros() override;
+
+        unsigned int findRankWithIndex(const unsigned int index) const override;
+        double getValue(const unsigned int row, const unsigned int col) const override;
         
         double frobeniusNorm() const override;
     
