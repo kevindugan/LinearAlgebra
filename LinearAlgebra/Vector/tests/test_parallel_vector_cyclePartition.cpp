@@ -67,107 +67,107 @@ TEST(ParallelVector_CyclePartition, init_non_modulo){
 }
 
 TEST(ParallelVector_CyclePartition, zero_entries){
-  // LinearAlgebra init;
-  // Vector_CyclePartition v(128, init);
+  LinearAlgebra init;
+  Vector_CyclePartition v(131, init);
 
-  // v.setValues(0.12);
-  // ASSERT_DOUBLE_EQ(v.l2norm(), 1.3576450198781713);
-  // v.zeros();
-  // ASSERT_DOUBLE_EQ(v.l2norm(), 0.0);
+  v.setValues(0.12);
+  EXPECT_DOUBLE_EQ(v.l2norm(), sqrt( 131.0 * 0.12 * 0.12));
+  v.zeros();
+  EXPECT_DOUBLE_EQ(v.l2norm(), 0.0);
 }
 
 TEST(ParallelVector_CyclePartition, set){
-  // LinearAlgebra init;
-  // Vector_CyclePartition v(13, init);
+  LinearAlgebra init;
+  Vector_CyclePartition v(13, init);
 
-  // std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
-  // double expected_norm = 0.0;
-  // for (auto item : vals)
-  //   expected_norm += item * item;
-  // expected_norm = sqrt(expected_norm);
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  double expected_norm = 0.0;
+  for (auto item : vals)
+    expected_norm += item * item;
+  expected_norm = sqrt(expected_norm);
 
-  // v.setValues(vals);
-  // ASSERT_DOUBLE_EQ(v.l2norm(), expected_norm);
+  v.setValues(vals);
+  EXPECT_DOUBLE_EQ(v.l2norm(), expected_norm);
 }
 
 TEST(ParallelVector_CyclePartition, getRankWithIndex){
-  // LinearAlgebra init;
-  // Vector_CyclePartition v(8, init);
+  LinearAlgebra init;
+  Vector_CyclePartition v(10, init);
 
-  // std::vector<unsigned int> ranks = {0, 0, 0, 1, 1, 1, 2, 2};
-  // for (unsigned int i = 0; i < v.size(); i++)
-  //   ASSERT_EQ(v.findRankWithIndex(i), ranks[i]);
+  std::vector<unsigned int> ranks = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1};
+  for (unsigned int i = 0; i < v.size(); i++)
+    EXPECT_EQ(v.findRankWithIndex(i), ranks[i]);
 }
 
 TEST(ParallelVector_CyclePartition, get){
-  // LinearAlgebra init;
-  // Vector_CyclePartition v(13, init);
+  LinearAlgebra init;
+  Vector_CyclePartition v(13, init);
 
-  // std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
-  // v.setValues(vals);
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  v.setValues(vals);
 
-  // for (unsigned int i = 0; i < vals.size(); i++)
-  //   ASSERT_DOUBLE_EQ(v.getValue(i), vals[i]);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    EXPECT_DOUBLE_EQ(v.getValue(i), vals[i]);
 }
 
 TEST(ParallelVector_CyclePartition, get_global){
-  // LinearAlgebra init;
-  // Vector_CyclePartition v(15, init);
+  LinearAlgebra init;
+  Vector_CyclePartition v(15, init);
 
-  // std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2, 9.2, 4.7};
-  // v.setValues(vals);
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2, 9.2, 4.7};
+  v.setValues(vals);
 
-  // std::vector<double> result(v.size());
-  // v.getGlobalValues(result);
+  std::vector<double> result(v.size());
+  v.getGlobalValues(result);
 
-  // ASSERT_EQ(result.size(), vals.size());
-  // for (unsigned int i = 0; i < result.size(); i++)
-  //   ASSERT_DOUBLE_EQ(result[i], vals[i]);
+  ASSERT_EQ(result.size(), vals.size());
+  for (unsigned int i = 0; i < result.size(); i++)
+    EXPECT_DOUBLE_EQ(result[i], vals[i]);
 }
 
 TEST(ParallelVector_CyclePartition, copy){
-  // LinearAlgebra init;
-  // Vector_CyclePartition source(13, init);
+  LinearAlgebra init;
+  Vector_CyclePartition source(13, init);
 
-  // std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
-  // source.setValues(vals);
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  source.setValues(vals);
 
-  // Vector_CyclePartition result1 = source;
-  // ASSERT_EQ(result1.size(), source.size());
-  // for (unsigned int i = 0; i < result1.size(); i++)
-  //   EXPECT_DOUBLE_EQ(result1.getValue(i), vals[i]);
+  Vector_CyclePartition result1 = source;
+  ASSERT_EQ(result1.size(), source.size());
+  for (unsigned int i = 0; i < result1.size(); i++)
+    EXPECT_DOUBLE_EQ(result1.getValue(i), vals[i]);
 
-  // Vector_CyclePartition result2(source);
-  // ASSERT_EQ(result2.size(), source.size());
-  // for (unsigned int i = 0; i < result2.size(); i++)
-  //   EXPECT_DOUBLE_EQ(result2.getValue(i), vals[i]);
+  Vector_CyclePartition result2(source);
+  ASSERT_EQ(result2.size(), source.size());
+  for (unsigned int i = 0; i < result2.size(); i++)
+    EXPECT_DOUBLE_EQ(result2.getValue(i), vals[i]);
 
-  // Vector_CyclePartition result3(1, init);
-  // result3 = source;
-  // ASSERT_EQ(result3.size(), source.size());
-  // for (unsigned int i = 0; i < result3.size(); i++)
-  //   EXPECT_DOUBLE_EQ(result3.getValue(i), vals[i]);
+  Vector_CyclePartition result3(1, init);
+  result3 = source;
+  ASSERT_EQ(result3.size(), source.size());
+  for (unsigned int i = 0; i < result3.size(); i++)
+    EXPECT_DOUBLE_EQ(result3.getValue(i), vals[i]);
 
 }
 
 TEST(ParallelVector_CyclePartition, add){
-  // LinearAlgebra init;
-  // Vector_CyclePartition one(13, init);
-  // Vector_CyclePartition two(13, init);
+  LinearAlgebra init;
+  Vector_CyclePartition one(13, init);
+  Vector_CyclePartition two(13, init);
 
-  // std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
-  // one.setValues(vals);
-  // two.setValues(vals);
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  one.setValues(vals);
+  two.setValues(vals);
 
-  // std::unique_ptr<AbstractVector> result = one.add(two);
-  // for (unsigned int i = 0; i < vals.size(); i++)
-  //   ASSERT_DOUBLE_EQ(result->getValue(i), 2.0 * vals[i]);
+  std::unique_ptr<AbstractVector> result = one.add(two);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    EXPECT_DOUBLE_EQ(result->getValue(i), 2.0 * vals[i]);
 
-  // result = one.add(-1.0, two);
-  // for (unsigned int i = 0; i < vals.size(); i++)
-  //   ASSERT_DOUBLE_EQ(result->getValue(i), 0.0);
+  result = one.add(-1.0, two);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    EXPECT_DOUBLE_EQ(result->getValue(i), 0.0);
 
-  // result = one.add(4.1, two);
-  // for (unsigned int i = 0; i < vals.size(); i++)
-  //   ASSERT_DOUBLE_EQ(result->getValue(i), vals[i] + 4.1 * vals[i]);
+  result = one.add(4.1, two);
+  for (unsigned int i = 0; i < vals.size(); i++)
+    EXPECT_DOUBLE_EQ(result->getValue(i), vals[i] + 4.1 * vals[i]);
 }
