@@ -49,6 +49,10 @@ Vector_CyclePartition::~Vector_CyclePartition() {
     delete[] this->values;
 }
 
+std::unique_ptr<AbstractVector> Vector_CyclePartition::clone() const {
+    return std::make_unique<Vector_CyclePartition>(*this);
+}
+
 void Vector_CyclePartition::setValues(const double &x) {
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] = x;

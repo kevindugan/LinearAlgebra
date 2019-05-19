@@ -147,7 +147,19 @@ TEST(ParallelVector_CyclePartition, copy){
   ASSERT_EQ(result3.size(), source.size());
   for (unsigned int i = 0; i < result3.size(); i++)
     EXPECT_DOUBLE_EQ(result3.getValue(i), vals[i]);
+}
 
+TEST(ParallelVector_CyclePartition, clone){
+  LinearAlgebra init;
+  Vector_CyclePartition source(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  source.setValues(vals);
+
+  std::unique_ptr<AbstractVector> result1 = source.clone();
+  ASSERT_EQ(result1->size(), source.size());
+  for (unsigned int i = 0; i < result1->size(); i++)
+    EXPECT_DOUBLE_EQ(result1->getValue(i), vals[i]);
 }
 
 TEST(ParallelVector_CyclePartition, add){

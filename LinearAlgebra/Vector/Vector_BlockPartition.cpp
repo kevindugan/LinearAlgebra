@@ -57,6 +57,11 @@ Vector_BlockPartition::~Vector_BlockPartition(){
     delete[] this->values;
 }
 
+
+std::unique_ptr<AbstractVector> Vector_BlockPartition::clone() const {
+    return std::make_unique<Vector_BlockPartition>(*this);
+}
+
 void Vector_BlockPartition::print() const {
     if (this->linalg->rank() == 0){
         std::cout << "=================\n";

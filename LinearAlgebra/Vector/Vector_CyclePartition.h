@@ -9,6 +9,7 @@ class Vector_CyclePartition : public AbstractVector {
         Vector_CyclePartition(const Vector_CyclePartition &other);
         Vector_CyclePartition& operator=(const Vector_CyclePartition &other);
         virtual ~Vector_CyclePartition();
+        std::unique_ptr<AbstractVector> clone() const;
 
         void setValues(const double &x) override;
         void setValues(const std::vector<double> &x) override;

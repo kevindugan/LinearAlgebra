@@ -9,6 +9,7 @@
 class AbstractVector {
     public:
         virtual ~AbstractVector() {}
+        virtual std::unique_ptr<AbstractVector> clone() const = 0;
 
         virtual void setValues(const double &x) = 0;
         virtual void setValues(const std::vector<double> &x) = 0;

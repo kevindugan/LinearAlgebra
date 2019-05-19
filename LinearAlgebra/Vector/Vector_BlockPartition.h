@@ -9,6 +9,7 @@ class Vector_BlockPartition : public AbstractVector {
         Vector_BlockPartition(const Vector_BlockPartition &other);
         Vector_BlockPartition& operator=(const Vector_BlockPartition &other);
         virtual ~Vector_BlockPartition();
+        std::unique_ptr<AbstractVector> clone() const;
 
         void setValues(const double &x) override;
         void setValues(const std::vector<double> &x) override;
