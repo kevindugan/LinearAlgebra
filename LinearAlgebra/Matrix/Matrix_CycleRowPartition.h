@@ -25,6 +25,8 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
 
         std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const override;
 
+        void print(std::ostream &out = std::cout) const;
+
     private:
         unsigned int nGlobalRows, nGlobalColumns;
         unsigned int nLocalRows, nLocalColumns;

@@ -1,6 +1,7 @@
 
 #include "Matrix_CycleRowPartition.h"
 #include "math.h"
+#include <iomanip>
 
 Matrix_CycleRowPartition::Matrix_CycleRowPartition(unsigned int nRows,
                                                    unsigned int nCols,
@@ -91,4 +92,52 @@ std::unique_ptr<AbstractVector> Matrix_CycleRowPartition::mult(const AbstractVec
     result->setValues(result_values);
 
     return result;
+}
+
+void Matrix_CycleRowPartition::print(std::ostream &out) const {
+
+    
+    std::vector<unsigned int> part = this->getPartitionSize();
+    if (this->linalg->rank() == 0){
+
+        std::vector<std::string> printRows(this->nGlobalRows);
+
+        // Fill in rank 0 values
+        for (unsigned int i = 0, j = 0; i < this->nLocalRows; i++, j+= this->linalg->size()){
+            std::stringstream stream;
+            for (unsigned int k = 0; k < this->nLocalColumns; k++){
+                stream << std::setw(6) << std::setprecision(4) << this->matrixStorage[i][k] << ", ";
+            }
+            printRows[j] = stream.str() + "\n";
+        }
+
+        // Fill in remaining rank values
+        for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
+            // Communicate
+            double *dump = new double[part[proc] * this->nLocalColumns];
+            MPI_Recv(dump, part[proc] * this->nLocalColumns, MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+            for (unsigned int i = 0, j = proc; i < part[proc]; i++, j += this->linalg->size()){
+                std::stringstream stream;
+                for (unsigned int k = 0; k < this->nLocalColumns; k++){
+                    stream << std::setw(6) << std::setprecision(4) << dump[i*this->nLocalColumns + k] << ", ";
+                }
+                printRows[j] = stream.str() + "\n";
+            }
+            delete[] dump;
+        }
+
+        for (const auto &line : printRows)
+            out << line.c_str();
+
+    } else {
+        double* send = new double[this->nLocalRows * this->nLocalColumns];
+        unsigned int index = 0;
+        for (unsigned int row = 0; row < this->nLocalRows; row++)
+            for (unsigned int col = 0; col < this->nLocalColumns; col++, index++)
+                send[index] = this->matrixStorage[row][col];
+
+        MPI_Send(send, this->nLocalRows * this->nLocalColumns, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+        delete[] send;
+    }
 }

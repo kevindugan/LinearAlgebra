@@ -148,3 +148,31 @@ TEST(ParallelMatrix_CycleRowPartition, mat_vec_mult){
   std::unique_ptr<AbstractVector> diff = result->add(-1.0, expected);
   EXPECT_NEAR(diff->l2norm(), 0.0, 1.0E-12);
 }
+
+TEST(ParallelMatrix_CycleRowPartition, print){
+  LinearAlgebra init;
+  Matrix_CycleRowPartition m(6, 6, init);
+
+  std::vector<std::vector<double>> m_vals = {{4.3,   0.052, 2.3,   3.1,   0.042, 5.1},
+                                             {8.2,   3.6,   4.3,   8.2,   3.6,   4.3},
+                                             {0.032, 2.3,   3.1,   0.042, 5.1,   3.1},
+                                             {2.3,   3.1,   0.042, 5.1,   6.3,   0.042},
+                                             {2.3,   3.1,   0.042, 5.1,   3.1,   4.3},
+                                             {0.027, 0.032, 6.3,   8.2,   3.6,   1.4}};
+
+    std::stringstream expected;
+    for (const auto &line : m_vals){
+        for (const auto &item : line)
+            expected << std::setw(6) << std::setprecision(4) << item << ", ";
+        expected << "\n";
+    }
+
+    m.setValues(m_vals);
+    std::stringstream result;
+    m.print(result);
+
+    if (init.rank() == 0){
+        ASSERT_EQ(expected.str().size(), result.str().size());
+        EXPECT_STREQ(expected.str().c_str(), result.str().c_str());
+    }
+}
