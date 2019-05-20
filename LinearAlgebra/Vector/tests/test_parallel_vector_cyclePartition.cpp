@@ -183,3 +183,24 @@ TEST(ParallelVector_CyclePartition, add){
   for (unsigned int i = 0; i < vals.size(); i++)
     EXPECT_DOUBLE_EQ(result->getValue(i), vals[i] + 4.1 * vals[i]);
 }
+
+TEST(ParallelVector_CyclePartition, print){
+  LinearAlgebra init;
+  Vector_CyclePartition v(13, init);
+
+  std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
+  v.setValues(vals);
+
+  std::stringstream expected;
+  for (unsigned int i = 0; i < vals.size(); i++)
+    expected << std::setw(9) << std::setprecision(2) << std::scientific << vals[i] << std::endl;
+
+  std::stringstream result;
+  v.print(result);
+
+  if (init.rank() == 0){
+    ASSERT_EQ(expected.str().size(), result.str().size());
+    EXPECT_STREQ(result.str().c_str(), expected.str().c_str());
+  }
+
+}

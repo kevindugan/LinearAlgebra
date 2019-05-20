@@ -20,6 +20,7 @@ class AbstractMatrix {
         virtual unsigned int findRankWithIndex(const unsigned int index) const = 0;
         virtual double getValue(const unsigned int row, const unsigned int col) const = 0;
         virtual std::vector<double> getRowValues(unsigned int row) const = 0;
+        virtual IndexRange getGlobalRowIndexRange() const = 0;
 
         virtual double frobeniusNorm() const = 0;
 

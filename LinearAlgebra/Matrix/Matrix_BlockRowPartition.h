@@ -18,7 +18,7 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
         unsigned int nRows() const override {return this->nGlobalRows;}
         unsigned int nCols() const override {return this->nGlobalColumns;}
         std::vector<unsigned int> getPartitionSize() const override;
-        IndexRange getGlobalRowIndexRange() const {return this->globalRowIndexRange;}
+        IndexRange getGlobalRowIndexRange() const override {return this->globalRowIndexRange;}
         std::vector<double> getRowValues(unsigned int row) const override;
 
         void setValues(const double& x) override;

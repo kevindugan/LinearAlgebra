@@ -31,6 +31,8 @@ class Vector_CyclePartition : public AbstractVector {
 
         double getLocalValue(const unsigned int local_index) const override;
         IndexRange getGlobalIndexRange() const {return this->globalIndexRange;}
+    
+        void print(std::ostream &out = std::cout) const override;
         
     private:
         unsigned int local_size, global_size;

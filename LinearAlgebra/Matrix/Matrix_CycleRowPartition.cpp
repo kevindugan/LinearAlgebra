@@ -167,7 +167,8 @@ void Matrix_CycleRowPartition::print(std::ostream &out) const {
         for (unsigned int i = 0, j = 0; i < this->nLocalRows; i++, j+= this->linalg->size()){
             std::stringstream stream;
             for (unsigned int k = 0; k < this->nLocalColumns; k++){
-                stream << std::setw(7) << std::setprecision(4) << this->matrixStorage[i][k] << ", ";
+                double value = ( fabs(this->matrixStorage[i][k]) < 1.0e-14) ? 0.0 : this->matrixStorage[i][k];
+                stream << std::setw(9) << std::setprecision(2) << std::scientific << value << ", ";
             }
             printRows[j] = stream.str() + "\n";
         }
@@ -181,7 +182,9 @@ void Matrix_CycleRowPartition::print(std::ostream &out) const {
             for (unsigned int i = 0, j = proc; i < part[proc]; i++, j += this->linalg->size()){
                 std::stringstream stream;
                 for (unsigned int k = 0; k < this->nLocalColumns; k++){
-                    stream << std::setw(7) << std::setprecision(4) << dump[i*this->nLocalColumns + k] << ", ";
+                    double value = ( fabs(dump[i*this->nLocalColumns + k]) < 1.0e-14) ? 0.0 : dump[i*this->nLocalColumns + k];
+                    stream << std::setw(9) << std::setprecision(2) << std::scientific << value << ", ";
+
                 }
                 printRows[j] = stream.str() + "\n";
             }
