@@ -202,3 +202,46 @@ void Matrix_CycleRowPartition::print(std::ostream &out) const {
         delete[] send;
     }
 }
+
+void Matrix_CycleRowPartition::setRowValues(const unsigned int row, const std::vector<double> &values){
+    Nucleus_ASSERT_EQ(values.size(), this->nGlobalColumns)
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+
+    unsigned int indexOnRank = this->findRankWithIndex(row);
+    if (this->linalg->rank() == indexOnRank)
+        for (unsigned int i = 0; i < this->nLocalColumns; i++)
+            this->matrixStorage[row / this->linalg->size()][i] = values[i];
+}
+
+void Matrix_CycleRowPartition::setLocalRowValues(const unsigned int row, const std::vector<double> &values){
+    Nucleus_ASSERT_EQ(values.size(), this->nLocalColumns)
+    Nucleus_ASSERT_LT(row, this->nLocalRows)
+
+    for (unsigned int i = 0; i < this->nLocalColumns; i++)
+        this->matrixStorage[row][i] = values[i];
+}
+
+std::vector<double> Matrix_CycleRowPartition::getRowValues(const unsigned int row) const {
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+    std::vector<double> result(this->nLocalColumns);
+
+    unsigned int indexOnRank = this->findRankWithIndex(row);
+
+    if (this->linalg->rank() == indexOnRank)
+        for (unsigned int i = 0; i < this->nLocalColumns; i++)
+            result[i] = this->matrixStorage[row / this->linalg->size()][i];
+
+    MPI_Bcast(result.data(), this->nLocalColumns, MPI_DOUBLE, indexOnRank, MPI_COMM_WORLD);
+
+    return result;
+}
+
+std::vector<double> Matrix_CycleRowPartition::getLocalRowValues(const unsigned int row) const {
+    Nucleus_ASSERT_LT(row, this->nLocalRows)
+    std::vector<double> result(this->nLocalColumns);
+
+    for (unsigned int i = 0; i < this->nLocalColumns; i++)
+        result[i] = this->matrixStorage[row][i];
+
+    return result;
+}

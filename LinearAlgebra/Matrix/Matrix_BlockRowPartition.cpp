@@ -168,3 +168,46 @@ std::unique_ptr<AbstractVector> Matrix_BlockRowPartition::mult(const AbstractVec
   
     return result;
 }
+
+void Matrix_BlockRowPartition::setRowValues(const unsigned int row, const std::vector<double> &values){
+    Nucleus_ASSERT_EQ(values.size(), this->nGlobalColumns)
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+
+    unsigned int indexOnRank = this->findRankWithIndex(row);
+    if (indexOnRank == this->linalg->rank())
+        for (unsigned int i = 0; i < this->nLocalColumns; i++)
+            this->matrixStorage[row-this->globalRowIndexRange.begin][i] = values[i];
+}
+
+void Matrix_BlockRowPartition::setLocalRowValues(const unsigned int row, const std::vector<double> &values){
+    Nucleus_ASSERT_EQ(values.size(), this->nLocalColumns)
+    Nucleus_ASSERT_LT(row, this->nLocalRows)
+
+    for (unsigned int i = 0; i < this->nLocalColumns; i++)
+        this->matrixStorage[row][i] = values[i];
+}
+
+std::vector<double> Matrix_BlockRowPartition::getRowValues(const unsigned int row) const {
+    Nucleus_ASSERT_LT(row, this->nGlobalRows)
+    std::vector<double> result(this->nLocalColumns);
+
+    unsigned int indexOnRank = this->findRankWithIndex(row);
+
+    if (this->linalg->rank() == indexOnRank)
+        for (unsigned int i = 0; i < this->nLocalColumns; i++)
+            result[i] = this->matrixStorage[row - this->globalRowIndexRange.begin][i];
+
+    MPI_Bcast(result.data(), this->nLocalColumns, MPI_DOUBLE, indexOnRank, MPI_COMM_WORLD);
+
+    return result;
+}
+
+std::vector<double> Matrix_BlockRowPartition::getLocalRowValues(const unsigned int row) const {
+    Nucleus_ASSERT_LT(row, this->nLocalRows)
+    std::vector<double> result(this->nLocalColumns);
+
+    for (unsigned int i = 0; i < this->nLocalColumns; i++)
+        result[i] = this->matrixStorage[row][i];
+
+    return result;
+}
