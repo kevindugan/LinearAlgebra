@@ -1,5 +1,6 @@
 #include "Vector_CyclePartition.h"
 #include "math.h"
+#include <iomanip>
 
 Vector_CyclePartition::Vector_CyclePartition(unsigned int size, const LinearAlgebra &linalg) {
     // Calculate the decomposed vector cycle size
@@ -149,4 +150,36 @@ unsigned int Vector_CyclePartition::findRankWithIndex(const unsigned int index) 
 
 double Vector_CyclePartition::getLocalValue(const unsigned int local_index) const {
     return this->values[local_index];
+}
+
+void Vector_CyclePartition::print(std::ostream &out) const {
+    std::vector<int> part = this->getPartitionSize();
+    if (this->linalg->rank() == 0){
+        std::vector<std::string> printValues(this->global_size);
+
+        // Fill in Rank 0 values
+        for (unsigned int local = 0, global = this->globalIndexRange.begin; local < this->local_size; local++, global+=this->globalIndexRange.skip){
+            std::stringstream stream;
+            stream << std::setw(9) << std::setprecision(2) << std::scientific << this->values[local] << "\n";
+            printValues[global] = stream.str();
+        }
+
+        // Fill in other Rank values
+        for (unsigned int proc = 1; proc < this->linalg->size(); proc++){
+            double* result = new double[part[proc]];
+            MPI_Recv(result, part[proc], MPI_DOUBLE, proc, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            for (unsigned int local = 0, global = proc; local < part[proc]; local++, global+=this->linalg->size()){
+                std::stringstream stream;
+                stream << std::setw(9) << std::setprecision(2) << std::scientific << result[local] << "\n";
+                printValues[global] = stream.str();
+            }
+            delete[] result;
+        }
+
+        for (const auto &line : printValues)
+            out << line.c_str();
+
+    } else {
+        MPI_Send(this->values, this->local_size, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+    }
 }
