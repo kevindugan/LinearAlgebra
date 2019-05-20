@@ -162,8 +162,10 @@ TEST(ParallelMatrix_CycleRowPartition, print){
 
     std::stringstream expected;
     for (const auto &line : m_vals){
-        for (const auto &item : line)
-            expected << std::setw(7) << std::setprecision(4) << item << ", ";
+        for (const auto &item : line){
+            double value = (fabs(item) < 1.0e-14) ? 0.0 : item;
+            expected << std::setw(9) << std::setprecision(2) << std::scientific << value << ", ";
+        }
         expected << "\n";
     }
 
