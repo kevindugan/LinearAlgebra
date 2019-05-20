@@ -31,6 +31,43 @@ Matrix_CycleRowPartition::Matrix_CycleRowPartition(unsigned int nRows,
     }
 }
 
+Matrix_CycleRowPartition::Matrix_CycleRowPartition(const Matrix_CycleRowPartition &other){
+    this->nLocalRows = other.nLocalRows;
+    this->nLocalColumns = other.nLocalColumns;
+    this->nGlobalRows = other.nGlobalRows;
+    this->nGlobalColumns = other.nGlobalColumns;
+
+    this->globalRowIndexRange = other.globalRowIndexRange;
+    this->linalg = other.linalg;
+
+    this->matrixStorage = new double*[this->nLocalRows];
+    for (unsigned int row = 0; row < this->nLocalRows; row++){
+        this->matrixStorage[row] = new double[this->nLocalColumns];
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            this->matrixStorage[row][col] = other.matrixStorage[row][col];
+    }
+}
+
+Matrix_CycleRowPartition& Matrix_CycleRowPartition::operator=(const Matrix_CycleRowPartition &other){
+    if (this != &other){
+        this->nLocalRows = other.nLocalRows;
+        this->nLocalColumns = other.nLocalColumns;
+        this->nGlobalRows = other.nGlobalRows;
+        this->nGlobalColumns = other.nGlobalColumns;
+
+        this->globalRowIndexRange = other.globalRowIndexRange;
+        this->linalg = other.linalg;
+
+        this->matrixStorage = new double*[this->nLocalRows];
+        for (unsigned int row = 0; row < this->nLocalRows; row++){
+            this->matrixStorage[row] = new double[this->nLocalColumns];
+            for (unsigned int col = 0; col < this->nLocalColumns; col++)
+                this->matrixStorage[row][col] = other.matrixStorage[row][col];
+        }
+    }
+    return *this;
+}
+
 Matrix_CycleRowPartition::~Matrix_CycleRowPartition(){
     for (unsigned int i = 0; i < this->nLocalRows; i++)
         delete[] this->matrixStorage[i];

@@ -10,6 +10,8 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
         Matrix_CycleRowPartition(unsigned int nRows,
             unsigned int nCols,
             const LinearAlgebra &linalg);
+        Matrix_CycleRowPartition(const Matrix_CycleRowPartition &other);
+        Matrix_CycleRowPartition& operator=(const Matrix_CycleRowPartition &other);
         virtual ~Matrix_CycleRowPartition();
 
         unsigned int nRows() const override { return this->nGlobalRows; }

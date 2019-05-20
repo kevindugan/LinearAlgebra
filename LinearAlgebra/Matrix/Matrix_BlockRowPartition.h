@@ -10,6 +10,8 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
         Matrix_BlockRowPartition(unsigned int nRows,
                unsigned int nCols,
                const LinearAlgebra& linalg);
+        Matrix_BlockRowPartition(const Matrix_BlockRowPartition &other);
+        Matrix_BlockRowPartition& operator=(const Matrix_BlockRowPartition &other);
         virtual ~Matrix_BlockRowPartition();
 
         unsigned int nRows() const override {return this->nGlobalRows;}

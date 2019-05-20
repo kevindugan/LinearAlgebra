@@ -34,6 +34,43 @@ Matrix_BlockRowPartition::Matrix_BlockRowPartition(unsigned int nRows,
     }
 }
 
+Matrix_BlockRowPartition::Matrix_BlockRowPartition(const Matrix_BlockRowPartition &other){
+    this->nLocalRows = other.nLocalRows;
+    this->nLocalColumns = other.nLocalColumns;
+    this->nGlobalRows = other.nGlobalRows;
+    this->nGlobalColumns = other.nGlobalColumns;
+
+    this->globalRowIndexRange = other.globalRowIndexRange;
+    this->linalg = other.linalg;
+
+    this->matrixStorage = new double*[this->nLocalRows];
+    for (unsigned int row = 0; row < this->nLocalRows; row++){
+        this->matrixStorage[row] = new double[this->nLocalColumns];
+        for (unsigned int col = 0; col < this->nLocalColumns; col++)
+            this->matrixStorage[row][col] = other.matrixStorage[row][col];
+    }
+}
+
+Matrix_BlockRowPartition& Matrix_BlockRowPartition::operator=(const Matrix_BlockRowPartition &other){
+    if (this != &other){
+        this->nLocalRows = other.nLocalRows;
+        this->nLocalColumns = other.nLocalColumns;
+        this->nGlobalRows = other.nGlobalRows;
+        this->nGlobalColumns = other.nGlobalColumns;
+
+        this->globalRowIndexRange = other.globalRowIndexRange;
+        this->linalg = other.linalg;
+
+        this->matrixStorage = new double*[this->nLocalRows];
+        for (unsigned int row = 0; row < this->nLocalRows; row++){
+            this->matrixStorage[row] = new double[this->nLocalColumns];
+            for (unsigned int col = 0; col < this->nLocalColumns; col++)
+                this->matrixStorage[row][col] = other.matrixStorage[row][col];
+        }
+    }
+    return *this;
+}
+
 Matrix_BlockRowPartition::~Matrix_BlockRowPartition(){
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         delete[] this->matrixStorage[row];
