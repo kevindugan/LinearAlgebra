@@ -1,19 +1,19 @@
 
-#include "LinearAlgebra/Vector.h"
+#include "Vector_BlockPartition.h"
 #include "math.h"
 
 int main(int argc, char* argv[]) {
 
   LinearAlgebra init(&argc, &argv);
   
-  Vector v(15, init);
-  Vector w(15, init);
+  Vector_BlockPartition v(15, init);
+  Vector_BlockPartition w(15, init);
   w.scale(0.01);
 
   v.add(w);
   v.print();
 
-  double norm = v.length();
+  double norm = v.l2norm();
 
   if (init.rank() == 0){
     linalg_assert( fabs(norm - 32.1776552906) < 1.0e-6 )

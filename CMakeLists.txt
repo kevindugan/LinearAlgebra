@@ -23,4 +23,4 @@ add_subdirectory(Nucleus)
 add_subdirectory(LinearAlgebra)
 
 add_executable(test_exec main.cpp)
-target_link_libraries(test_exec LinearAlgebra)
+target_link_libraries(test_exec Vector)

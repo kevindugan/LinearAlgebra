@@ -1,8 +1,8 @@
-#include "Vector.h"
+#include "Vector_BlockPartition.h"
 #include <string>
 #include "math.h"
 
-Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
+Vector_BlockPartition::Vector_BlockPartition(unsigned int size, const LinearAlgebra& linalg){
     // Calculate the decomposed vector block size
     float ratio = float(size) / float(linalg.size());
     unsigned int splitIndex = size - linalg.size() * floor( ratio );
@@ -27,7 +27,7 @@ Vector::Vector(unsigned int size, const LinearAlgebra& linalg){
         this->values[i] = 0.0;
 }
 
-Vector::Vector(const Vector &other) {
+Vector_BlockPartition::Vector_BlockPartition(const Vector_BlockPartition &other) {
     this->local_size = other.local_size;
     this->global_size = other.global_size;
     this->globalIndexRange = other.globalIndexRange;
@@ -38,7 +38,7 @@ Vector::Vector(const Vector &other) {
         this->values[i] = other.values[i];
 }
 
-Vector& Vector::operator=(const Vector &other) {
+Vector_BlockPartition& Vector_BlockPartition::operator=(const Vector_BlockPartition &other) {
     if (this != &other){
         this->local_size = other.local_size;
         this->global_size = other.global_size;
@@ -53,11 +53,16 @@ Vector& Vector::operator=(const Vector &other) {
     return *this;
 }
 
-Vector::~Vector(){
+Vector_BlockPartition::~Vector_BlockPartition(){
     delete[] this->values;
 }
 
-void Vector::print() const {
+
+std::unique_ptr<AbstractVector> Vector_BlockPartition::clone() const {
+    return std::make_unique<Vector_BlockPartition>(*this);
+}
+
+void Vector_BlockPartition::print() const {
     if (this->linalg->rank() == 0){
         std::cout << "=================\n";
         for (unsigned int i = 0; i < this->local_size; i++)
@@ -79,34 +84,34 @@ void Vector::print() const {
     }
 }
 
-std::vector<int> Vector::getPartitionSize() const {
+std::vector<int> Vector_BlockPartition::getPartitionSize() const {
     std::vector<int> result(this->linalg->size());
     MPI_Allgather(&this->local_size, 1, MPI_UNSIGNED, result.data(), 1, MPI_UNSIGNED, MPI_COMM_WORLD);
     return result;
 }
 
-void Vector::zeros() {
+void Vector_BlockPartition::zeros() {
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] = 0.0;
 }
 
-void Vector::setValues(const double &x){
+void Vector_BlockPartition::setValues(const double &x){
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] = x;
 }
 
-void Vector::setValues(const std::vector<double> &x){
+void Vector_BlockPartition::setValues(const std::vector<double> &x){
     Nucleus_ASSERT_EQ(x.size(), this->global_size)
     for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
         this->values[i] = x[j];
 }
 
-void Vector::scale(const double &x){
+void Vector_BlockPartition::scale(const double &x){
     for (unsigned int i = 0; i < this->local_size; i++)
         this->values[i] *= x;
 }
 
-unsigned int Vector::findRankWithIndex(const unsigned int index) const {
+unsigned int Vector_BlockPartition::findRankWithIndex(const unsigned int index) const {
     float ratio = float(this->global_size) / float(this->linalg->size());
     unsigned int splitRank = this->global_size - this->linalg->size() * floor( ratio );
     unsigned int splitIndex = splitRank * ceil(ratio);
@@ -121,7 +126,7 @@ unsigned int Vector::findRankWithIndex(const unsigned int index) const {
     return ownerProc;
 }
 
-double Vector::getValue(const unsigned int index) const {
+double Vector_BlockPartition::getValue(const unsigned int index) const {
     linalg_assert(index < this->global_size)
 
     // Calculate Rank containing index
@@ -136,7 +141,7 @@ double Vector::getValue(const unsigned int index) const {
     return result;
 }
 
-void Vector::getGlobalValues(std::vector<double> &global_values) const {
+void Vector_BlockPartition::getGlobalValues(std::vector<double> &global_values) const {
     Nucleus_ASSERT_EQ(this->global_size, global_values.size())
     std::vector<int> block_sizes = this->getPartitionSize();
     std::vector<int> offset(this->linalg->size());
@@ -146,24 +151,28 @@ void Vector::getGlobalValues(std::vector<double> &global_values) const {
     MPI_Allgatherv(this->values, this->local_size, MPI_DOUBLE, global_values.data(), block_sizes.data(), offset.data(), MPI_DOUBLE, MPI_COMM_WORLD);
 }
 
-Vector Vector::add(const Vector &other) const {
+std::unique_ptr<AbstractVector> Vector_BlockPartition::add(const AbstractVector &other) const {
     return this->add(1.0, other);
 }
 
-Vector Vector::add(const double &scale, const Vector &other) const {
+double Vector_BlockPartition::getLocalValue(const unsigned int local_index) const {
+    return this->values[local_index];
+}
+
+std::unique_ptr<AbstractVector> Vector_BlockPartition::add(const double &scale, const AbstractVector &other) const {
     Nucleus_ASSERT_EQ(this->global_size, other.size())
-    Vector result(this->global_size, *this->linalg);
+    std::unique_ptr<AbstractVector> result = std::make_unique<Vector_BlockPartition>(this->global_size, *this->linalg);
 
     std::vector<double> vals(this->global_size);
     for (unsigned int i = 0, j = this->globalIndexRange.begin; i < this->local_size; i++, j++)
-        vals[j] = this->values[i] + scale * other.values[i];
+        vals[j] = this->values[i] + scale * other.getLocalValue(i);
 
-    result.setValues(vals);
+    result->setValues(vals);
     
     return result;
 }
 
-double Vector::length() const {
+double Vector_BlockPartition::l2norm() const {
     double local_result = 0.0;
     for (unsigned int i = 0; i < this->local_size; i++)
         local_result += this->values[i] * this->values[i];
