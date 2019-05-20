@@ -400,13 +400,3 @@ TEST(ParallelMatrix_BlockRowPartition, set_row){
           EXPECT_DOUBLE_EQ(m.getValue(row,col), vals[row][col]);
   }
 }
-
-TEST(ParallelMatrix_BlockRowPartition, next_row_index){
-    LinearAlgebra init;
-    Matrix_BlockRowPartition m(23, 23, init);
-
-    std::vector<unsigned int> expected = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 0, 0, 0, 0, 1, 1};
-
-    for (unsigned int row = 0; row < expected.size(); row++)
-        EXPECT_EQ(m.getNextLocalRowIndex(row), expected[row]);
-}

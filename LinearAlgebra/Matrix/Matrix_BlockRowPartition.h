@@ -35,7 +35,6 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
 
         void setLocalRowValues(const unsigned int row, const std::vector<double> &values) override;
         std::vector<double> getLocalRowValues(const unsigned int row) const override;
-        unsigned int getNextLocalRowIndex(const unsigned int row) const override;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;
