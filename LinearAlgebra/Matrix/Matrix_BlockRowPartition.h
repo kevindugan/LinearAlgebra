@@ -13,6 +13,7 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
         Matrix_BlockRowPartition(const Matrix_BlockRowPartition &other);
         Matrix_BlockRowPartition& operator=(const Matrix_BlockRowPartition &other);
         virtual ~Matrix_BlockRowPartition();
+        std::unique_ptr<AbstractMatrix> clone() const override;
 
         unsigned int nRows() const override {return this->nGlobalRows;}
         unsigned int nCols() const override {return this->nGlobalColumns;}

@@ -71,6 +71,10 @@ Matrix_BlockRowPartition& Matrix_BlockRowPartition::operator=(const Matrix_Block
     return *this;
 }
 
+std::unique_ptr<AbstractMatrix> Matrix_BlockRowPartition::clone() const {
+    return std::make_unique<Matrix_BlockRowPartition>(Matrix_BlockRowPartition(*this));
+}
+
 Matrix_BlockRowPartition::~Matrix_BlockRowPartition(){
     for (unsigned int row = 0; row < this->nLocalRows; row++)
         delete[] this->matrixStorage[row];

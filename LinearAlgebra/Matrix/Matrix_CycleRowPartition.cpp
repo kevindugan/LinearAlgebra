@@ -68,6 +68,10 @@ Matrix_CycleRowPartition& Matrix_CycleRowPartition::operator=(const Matrix_Cycle
     return *this;
 }
 
+std::unique_ptr<AbstractMatrix> Matrix_CycleRowPartition::clone() const {
+    return std::make_unique<Matrix_CycleRowPartition>(Matrix_CycleRowPartition(*this));
+}
+
 Matrix_CycleRowPartition::~Matrix_CycleRowPartition(){
     for (unsigned int i = 0; i < this->nLocalRows; i++)
         delete[] this->matrixStorage[i];

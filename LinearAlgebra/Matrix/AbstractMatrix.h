@@ -6,6 +6,7 @@
 class AbstractMatrix {
     public:
         virtual ~AbstractMatrix() {}
+        virtual std::unique_ptr<AbstractMatrix> clone() const = 0;
 
         virtual unsigned int nRows() const = 0;
         virtual unsigned int nCols() const = 0;

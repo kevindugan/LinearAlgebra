@@ -13,6 +13,7 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
         Matrix_CycleRowPartition(const Matrix_CycleRowPartition &other);
         Matrix_CycleRowPartition& operator=(const Matrix_CycleRowPartition &other);
         virtual ~Matrix_CycleRowPartition();
+        std::unique_ptr<AbstractMatrix> clone() const override;
 
         unsigned int nRows() const override { return this->nGlobalRows; }
         unsigned int nCols() const override { return this->nGlobalColumns; }
