@@ -18,7 +18,7 @@ std::unique_ptr<AbstractVector> GaussianElimination::solve(const AbstractMatrix 
     std::vector<double> rhs_values(localb->size());
     localb->getGlobalValues(rhs_values);
 
-    for (unsigned int col = 0; col < 6/*localA->nCols()*/; col++){
+    for (unsigned int col = 0; col < localA->nCols(); col++){
         std::vector<double> header = localA->getRowValues(col);
         double rhs_header = localb->getValue(col);
 
