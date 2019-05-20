@@ -29,6 +29,7 @@ class AbstractMatrix {
 
         virtual void setLocalRowValues(const unsigned int row, const std::vector<double> &values) = 0;
         virtual std::vector<double> getLocalRowValues(const unsigned int row) const = 0;
+        virtual unsigned int getNextLocalRowIndex(const unsigned int row) const = 0;
 };
 
 #endif // ABSTRACT_MATRIX_H_QLWK

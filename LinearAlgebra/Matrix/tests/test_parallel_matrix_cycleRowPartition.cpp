@@ -163,7 +163,7 @@ TEST(ParallelMatrix_CycleRowPartition, print){
     std::stringstream expected;
     for (const auto &line : m_vals){
         for (const auto &item : line)
-            expected << std::setw(6) << std::setprecision(4) << item << ", ";
+            expected << std::setw(7) << std::setprecision(4) << item << ", ";
         expected << "\n";
     }
 
@@ -413,4 +413,14 @@ TEST(ParallelMatrix_CycleRowPartition, set_row){
       for (unsigned int col = 0; col < m.nCols(); col++)
           EXPECT_DOUBLE_EQ(m.getValue(row,col), vals[row][col]);
   }
+}
+
+TEST(ParallelMatrix_CycleRowPartition, next_row_index){
+    LinearAlgebra init;
+    Matrix_CycleRowPartition m(23, 23, init);
+
+    std::vector<unsigned int> expected = {0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 0, 0, 0, 0, 1, 1};
+
+    for (unsigned int row = 0; row < expected.size(); row++)
+        EXPECT_EQ(m.getNextLocalRowIndex(row), expected[row]);
 }

@@ -211,3 +211,7 @@ std::vector<double> Matrix_BlockRowPartition::getLocalRowValues(const unsigned i
 
     return result;
 }
+
+unsigned int Matrix_BlockRowPartition::getNextLocalRowIndex(const unsigned int row) const {
+    return 0;
+}

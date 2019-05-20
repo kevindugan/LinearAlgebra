@@ -6,9 +6,12 @@
 class GaussianElimination : public LinearSolver {
 
     public:
-        GaussianElimination();
+        GaussianElimination(const LinearAlgebra &init);
 
         std::unique_ptr<AbstractVector> solve(const AbstractMatrix &A, const AbstractVector &b) const override;
+
+    private:
+        const LinearAlgebra *linalg;
 };
 
 #endif // GAUSSIAN_ELIMINATION_H_0C9A

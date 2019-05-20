@@ -167,7 +167,7 @@ void Matrix_CycleRowPartition::print(std::ostream &out) const {
         for (unsigned int i = 0, j = 0; i < this->nLocalRows; i++, j+= this->linalg->size()){
             std::stringstream stream;
             for (unsigned int k = 0; k < this->nLocalColumns; k++){
-                stream << std::setw(6) << std::setprecision(4) << this->matrixStorage[i][k] << ", ";
+                stream << std::setw(7) << std::setprecision(4) << this->matrixStorage[i][k] << ", ";
             }
             printRows[j] = stream.str() + "\n";
         }
@@ -181,7 +181,7 @@ void Matrix_CycleRowPartition::print(std::ostream &out) const {
             for (unsigned int i = 0, j = proc; i < part[proc]; i++, j += this->linalg->size()){
                 std::stringstream stream;
                 for (unsigned int k = 0; k < this->nLocalColumns; k++){
-                    stream << std::setw(6) << std::setprecision(4) << dump[i*this->nLocalColumns + k] << ", ";
+                    stream << std::setw(7) << std::setprecision(4) << dump[i*this->nLocalColumns + k] << ", ";
                 }
                 printRows[j] = stream.str() + "\n";
             }
@@ -244,4 +244,8 @@ std::vector<double> Matrix_CycleRowPartition::getLocalRowValues(const unsigned i
         result[i] = this->matrixStorage[row][i];
 
     return result;
+}
+
+unsigned int Matrix_CycleRowPartition::getNextLocalRowIndex(const unsigned int row) const {
+    return 0;
 }
