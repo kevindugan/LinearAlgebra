@@ -245,7 +245,3 @@ std::vector<double> Matrix_CycleRowPartition::getLocalRowValues(const unsigned i
 
     return result;
 }
-
-unsigned int Matrix_CycleRowPartition::getNextLocalRowIndex(const unsigned int row) const {
-    return 0;
-}
