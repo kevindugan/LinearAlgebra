@@ -8,7 +8,7 @@
 
 TEST(GaussianElimination, cycle_partition){
     LinearAlgebra init;
-    const int size = 6; //23;
+    const int size = 23;
     Matrix_CycleRowPartition A(size, size, init);
     Vector_CyclePartition x(size, init);
     std::unique_ptr<AbstractVector> b = std::make_unique<Vector_CyclePartition>(size, init);
@@ -33,5 +33,5 @@ TEST(GaussianElimination, cycle_partition){
     std::unique_ptr<AbstractVector> result = solver.solve(A, *b);
 
     double diff = (x.add(-1.0, *result))->l2norm();
-    EXPECT_NEAR(diff, 0.0, 1.0e-13);
+    EXPECT_NEAR(diff, 0.0, 1.0e-11);
 }
