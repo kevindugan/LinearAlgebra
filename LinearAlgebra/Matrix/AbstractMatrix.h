@@ -22,6 +22,8 @@ class AbstractMatrix {
         virtual double frobeniusNorm() const = 0;
 
         virtual std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const = 0;
+
+        virtual void print(std::ostream &out = std::cout) const {}
 };
 
 #endif // ABSTRACT_MATRIX_H_QLWK
