@@ -29,6 +29,8 @@ class AbstractVector {
         virtual unsigned int findRankWithIndex(const unsigned int index) const = 0;
 
         virtual double getLocalValue(const unsigned int local_index) const = 0;
+    
+        virtual void print(std::ostream &out = std::cout) const {}
 };
 
 #endif // ABSTRACT_VECTOR_H_C0Q9
