@@ -336,7 +336,7 @@ TEST(ParallelMatrix_BlockRowPartition, get_row){
     offset[i] = sum;
 
   for (unsigned int i = 0; i < part[init.rank()]; i++){
-    std::vector<double> row_values = m.getLocalRowValues(i);
+    double* row_values = &m.getLocalRowValues(i);
     for (unsigned int j = 0; j < m.nCols(); j++)
       EXPECT_DOUBLE_EQ(row_values[j], vals[offset[init.rank()] + i][j]);
   }

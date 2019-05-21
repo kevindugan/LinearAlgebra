@@ -34,7 +34,7 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
         std::unique_ptr<AbstractVector> mult(const AbstractVector &other) const override;
 
         void setLocalRowValues(const unsigned int row, const std::vector<double> &values) override;
-        std::vector<double> getLocalRowValues(const unsigned int row) const override;
+        double& getLocalRowValues(const unsigned int row) const override;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;

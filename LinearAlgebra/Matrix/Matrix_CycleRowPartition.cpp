@@ -239,12 +239,14 @@ std::vector<double> Matrix_CycleRowPartition::getRowValues(const unsigned int ro
     return result;
 }
 
-std::vector<double> Matrix_CycleRowPartition::getLocalRowValues(const unsigned int row) const {
+double& Matrix_CycleRowPartition::getLocalRowValues(const unsigned int row) const {
     Nucleus_ASSERT_LT(row, this->nLocalRows)
-    std::vector<double> result(this->nLocalColumns);
 
-    for (unsigned int i = 0; i < this->nLocalColumns; i++)
-        result[i] = this->matrixStorage[row][i];
+    return *this->matrixStorage[row];
+    // std::vector<double> result(this->nLocalColumns);
 
-    return result;
+    // for (unsigned int i = 0; i < this->nLocalColumns; i++)
+    //     result[i] = this->matrixStorage[row][i];
+
+    // return result;
 }

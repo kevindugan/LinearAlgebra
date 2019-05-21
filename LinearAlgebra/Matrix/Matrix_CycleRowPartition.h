@@ -36,7 +36,7 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
         void print(std::ostream &out = std::cout) const;
 
         void setLocalRowValues(const unsigned int row, const std::vector<double> &values) override;
-        std::vector<double> getLocalRowValues(const unsigned int row) const override;
+        double& getLocalRowValues(const unsigned int row) const override;
 
     private:
         unsigned int nGlobalRows, nGlobalColumns;

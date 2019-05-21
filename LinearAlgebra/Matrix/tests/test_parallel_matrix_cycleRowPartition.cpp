@@ -356,7 +356,7 @@ TEST(ParallelMatrix_CycleRowPartition, get_row){
   // Local Row values
   std::vector<unsigned int> part = m.getPartitionSize();
   for (unsigned int i = 0, k=init.rank(); i < part[init.rank()]; i++, k+=init.size()){
-    std::vector<double> row_values = m.getLocalRowValues(i);
+    double* row_values = &m.getLocalRowValues(i);
     for (unsigned int j = 0; j < m.nCols(); j++)
       EXPECT_DOUBLE_EQ(row_values[j], vals[k][j]);
   }
