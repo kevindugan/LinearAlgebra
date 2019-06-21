@@ -3,7 +3,7 @@
 
 Matrix_BlockRowPartition::Matrix_BlockRowPartition(unsigned int nRows,
                unsigned int nCols,
-               const LinearAlgebra& linalg){
+               const Parallel& linalg){
 
     // Calculate decomposed row block size
     float ratio = float(nRows) / float(linalg.size());

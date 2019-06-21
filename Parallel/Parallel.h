@@ -1,15 +1,15 @@
-#ifndef LINEAR_ALGEBRA_H_A72K
-#define LINEAR_ALGEBRA_H_A72K
+#ifndef PARALLEL_H_A72K
+#define PARALLEL_H_A72K
 
 #include <mpi.h>
 #include <iostream>
 
-class LinearAlgebra {
+class Parallel {
 
     public:
-        LinearAlgebra();
-        LinearAlgebra(int* argc, char*** argv);
-        virtual ~LinearAlgebra();
+        Parallel();
+        Parallel(int* argc, char*** argv);
+        virtual ~Parallel();
 
         int rank() const {return this->comm_rank;}
         int size() const {return this->comm_size;}
@@ -19,7 +19,7 @@ class LinearAlgebra {
         bool linalg_initialized_mpi;
 };
 
-#define linalg_assert(condition) \
+#define Nucleus_ASSERT(condition) \
     if(!(condition)){ \
         std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << std::endl; \
         MPI_Abort(MPI_COMM_WORLD, 1); \
@@ -40,4 +40,4 @@ class LinearAlgebra {
         MPI_Abort(MPI_COMM_WORLD, 1); \
     }
 
-#endif // LINEAR_ALGEBRA_H_A72K
+#endif // PARALLEL_H_A72K

@@ -9,7 +9,7 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
     public:
         Matrix_BlockRowPartition(unsigned int nRows,
                unsigned int nCols,
-               const LinearAlgebra& linalg);
+               const Parallel& linalg);
         Matrix_BlockRowPartition(const Matrix_BlockRowPartition &other);
         Matrix_BlockRowPartition& operator=(const Matrix_BlockRowPartition &other);
         virtual ~Matrix_BlockRowPartition();
@@ -39,7 +39,7 @@ class Matrix_BlockRowPartition : public AbstractMatrix {
     private:
         unsigned int nGlobalRows, nGlobalColumns;
         unsigned int nLocalRows, nLocalColumns;
-        const LinearAlgebra* linalg;
+        const Parallel* linalg;
         IndexRange globalRowIndexRange;
         double** matrixStorage;
 };

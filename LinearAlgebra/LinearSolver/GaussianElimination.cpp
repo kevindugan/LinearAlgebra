@@ -1,6 +1,6 @@
 #include "GaussianElimination.h"
 
-GaussianElimination::GaussianElimination(const LinearAlgebra &init){
+GaussianElimination::GaussianElimination(const Parallel &init){
     this->linalg = &init;
 }
 

@@ -7,7 +7,7 @@
 #include "Vector_CyclePartition.h"
 
 TEST(GaussianElimination, cycle_partition){
-    LinearAlgebra init;
+    Parallel init;
     const int size = 23;
     Matrix_CycleRowPartition A(size, size, init);
     Vector_CyclePartition x(size, init);

@@ -5,7 +5,7 @@
 
 Matrix_CycleRowPartition::Matrix_CycleRowPartition(unsigned int nRows,
                                                    unsigned int nCols,
-                                                   const LinearAlgebra &linalg){
+                                                   const Parallel &linalg){
 
     // Calculate decomposed row cycle size
     float ratio = float(nRows) / float(linalg.size());

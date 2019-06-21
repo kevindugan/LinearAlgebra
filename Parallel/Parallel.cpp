@@ -1,6 +1,6 @@
-#include "LinearAlgebra.h"
+#include "Parallel.h"
 
-LinearAlgebra::LinearAlgebra(){
+Parallel::Parallel(){
     int initialized;
     MPI_Initialized(&initialized);
     if(initialized){
@@ -10,14 +10,14 @@ LinearAlgebra::LinearAlgebra(){
     }
 }
 
-LinearAlgebra::LinearAlgebra(int* argc, char*** argv){
+Parallel::Parallel(int* argc, char*** argv){
     MPI_Init(argc, argv);
     this->linalg_initialized_mpi = true;
     MPI_Comm_rank(MPI_COMM_WORLD, &this->comm_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &this->comm_size);
 }
 
-LinearAlgebra::~LinearAlgebra(){
+Parallel::~Parallel(){
     if (this->linalg_initialized_mpi)
         MPI_Finalize();
 }

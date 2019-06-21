@@ -2,7 +2,7 @@
 #include "Vector_CyclePartition.h"
 
 TEST(ParallelVector_CyclePartition, inti_modulo){
-    LinearAlgebra init;
+    Parallel init;
     Vector_CyclePartition v(16, init);
 
     ASSERT_EQ(v.size(), 16);
@@ -25,7 +25,7 @@ TEST(ParallelVector_CyclePartition, inti_modulo){
 }
 
 TEST(ParallelVector_CyclePartition, init_non_modulo){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(17, init);
 
   ASSERT_EQ(v.size(), 17);
@@ -67,7 +67,7 @@ TEST(ParallelVector_CyclePartition, init_non_modulo){
 }
 
 TEST(ParallelVector_CyclePartition, zero_entries){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(131, init);
 
   v.setValues(0.12);
@@ -77,7 +77,7 @@ TEST(ParallelVector_CyclePartition, zero_entries){
 }
 
 TEST(ParallelVector_CyclePartition, set){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -91,7 +91,7 @@ TEST(ParallelVector_CyclePartition, set){
 }
 
 TEST(ParallelVector_CyclePartition, getRankWithIndex){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(10, init);
 
   std::vector<unsigned int> ranks = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1};
@@ -100,7 +100,7 @@ TEST(ParallelVector_CyclePartition, getRankWithIndex){
 }
 
 TEST(ParallelVector_CyclePartition, get){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -111,7 +111,7 @@ TEST(ParallelVector_CyclePartition, get){
 }
 
 TEST(ParallelVector_CyclePartition, get_global){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(15, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2, 9.2, 4.7};
@@ -126,7 +126,7 @@ TEST(ParallelVector_CyclePartition, get_global){
 }
 
 TEST(ParallelVector_CyclePartition, copy){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition source(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -150,7 +150,7 @@ TEST(ParallelVector_CyclePartition, copy){
 }
 
 TEST(ParallelVector_CyclePartition, clone){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition source(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -163,7 +163,7 @@ TEST(ParallelVector_CyclePartition, clone){
 }
 
 TEST(ParallelVector_CyclePartition, add){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition one(13, init);
   Vector_CyclePartition two(13, init);
 
@@ -185,7 +185,7 @@ TEST(ParallelVector_CyclePartition, add){
 }
 
 TEST(ParallelVector_CyclePartition, print){
-  LinearAlgebra init;
+  Parallel init;
   Vector_CyclePartition v(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};

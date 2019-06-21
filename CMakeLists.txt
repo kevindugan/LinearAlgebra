@@ -20,6 +20,7 @@ set(CMAKE_C_COMPILER mpicc)
 # Project
 #####################################
 add_subdirectory(Nucleus)
+add_subdirectory(Parallel)
 add_subdirectory(LinearAlgebra)
 add_subdirectory(Algorithms)
 

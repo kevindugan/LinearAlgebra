@@ -5,7 +5,7 @@
 
 class Vector_CyclePartition : public AbstractVector {
     public:
-        Vector_CyclePartition(unsigned int size, const LinearAlgebra& linalg);
+        Vector_CyclePartition(unsigned int size, const Parallel& linalg);
         Vector_CyclePartition(const Vector_CyclePartition &other);
         Vector_CyclePartition& operator=(const Vector_CyclePartition &other);
         virtual ~Vector_CyclePartition();
@@ -37,7 +37,7 @@ class Vector_CyclePartition : public AbstractVector {
     private:
         unsigned int local_size, global_size;
         double* values;
-        const LinearAlgebra* linalg;
+        const Parallel* linalg;
         IndexRange globalIndexRange;
 };
 

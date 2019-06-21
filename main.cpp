@@ -4,7 +4,7 @@
 
 int main(int argc, char* argv[]) {
 
-  LinearAlgebra init(&argc, &argv);
+  Parallel init(&argc, &argv);
   
   Vector_BlockPartition v(15, init);
   Vector_BlockPartition w(15, init);
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
   double norm = v.l2norm();
 
   if (init.rank() == 0){
-    linalg_assert( fabs(norm - 32.1776552906) < 1.0e-6 )
+    Nucleus_ASSERT( fabs(norm - 32.1776552906) < 1.0e-6 )
     std::string msg;
     msg += "[Rank " + std::to_string(init.rank()) + "] ";
     msg += std::to_string(norm);

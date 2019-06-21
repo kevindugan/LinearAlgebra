@@ -2,7 +2,7 @@
 #define ABSTRACT_VECTOR_H_C0Q9
 
 #include "Partitioning.h"
-#include "LinearAlgebra.h"
+#include "Parallel.h"
 #include <vector>
 #include <memory>
 

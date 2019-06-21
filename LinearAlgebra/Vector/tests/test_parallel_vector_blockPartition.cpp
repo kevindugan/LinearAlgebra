@@ -3,7 +3,7 @@
 #include "Vector_BlockPartition.h"
 
 TEST(ParallelVector_BlockPartition, init_modulo){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(15, init);
 
   ASSERT_EQ(v.size(), 15);
@@ -24,7 +24,7 @@ TEST(ParallelVector_BlockPartition, init_modulo){
 }
 
 TEST(ParallelVector_BlockPartition, init_non_modulo){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(16, init);
 
   ASSERT_EQ(v.size(), 16);
@@ -62,7 +62,7 @@ TEST(ParallelVector_BlockPartition, init_non_modulo){
 }
 
 TEST(ParallelVector_BlockPartition, zero_entries){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(128, init);
 
   v.setValues(0.12);
@@ -72,7 +72,7 @@ TEST(ParallelVector_BlockPartition, zero_entries){
 }
 
 TEST(ParallelVector_BlockPartition, set){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -86,7 +86,7 @@ TEST(ParallelVector_BlockPartition, set){
 }
 
 TEST(ParallelVector_BlockPartition, getRankWithIndex){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(8, init);
 
   std::vector<unsigned int> ranks = {0, 0, 0, 1, 1, 1, 2, 2};
@@ -95,7 +95,7 @@ TEST(ParallelVector_BlockPartition, getRankWithIndex){
 }
 
 TEST(ParallelVector_BlockPartition, get){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -106,7 +106,7 @@ TEST(ParallelVector_BlockPartition, get){
 }
 
 TEST(ParallelVector_BlockPartition, get_global){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition v(15, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2, 9.2, 4.7};
@@ -121,7 +121,7 @@ TEST(ParallelVector_BlockPartition, get_global){
 }
 
 TEST(ParallelVector_BlockPartition, copy){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition source(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -146,7 +146,7 @@ TEST(ParallelVector_BlockPartition, copy){
 }
 
 TEST(ParallelVector_BlockPartition, clone){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition source(13, init);
 
   std::vector<double> vals = {1.1, 2.3, 3.1, 4.2, 5.1, 2.7, 3.2, 6.3, 8.2, 3.6, 4.3, 5.2, 7.2};
@@ -159,7 +159,7 @@ TEST(ParallelVector_BlockPartition, clone){
 }
 
 TEST(ParallelVector_BlockPartition, add){
-  LinearAlgebra init;
+  Parallel init;
   Vector_BlockPartition one(13, init);
   Vector_BlockPartition two(13, init);
 

@@ -10,7 +10,7 @@ using timer = std::chrono::high_resolution_clock;
 
 
 int main (int argc, char* argv[]){
-    LinearAlgebra init(&argc, &argv);
+    Parallel init(&argc, &argv);
 
     // Setup calculation
     timer::time_point start = timer::now();

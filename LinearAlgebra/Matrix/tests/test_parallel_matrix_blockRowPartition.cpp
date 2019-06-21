@@ -3,7 +3,7 @@
 #include "Matrix_BlockRowPartition.h"
 
 TEST(ParallelMatrix_BlockRowPartition, init_modulo){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_BlockRowPartition m(15, 15, init);
 
     ASSERT_EQ(m.nRows(), 15);
@@ -28,7 +28,7 @@ TEST(ParallelMatrix_BlockRowPartition, init_modulo){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, init_non_modulo){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(16, 16, init);
 
   ASSERT_EQ(m.nRows(), 16);
@@ -74,7 +74,7 @@ TEST(ParallelMatrix_BlockRowPartition, init_non_modulo){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, zero_entries){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(128, 128, init);
 
   m.setValues(0.12);
@@ -85,7 +85,7 @@ TEST(ParallelMatrix_BlockRowPartition, zero_entries){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, set){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -123,7 +123,7 @@ TEST(ParallelMatrix_BlockRowPartition, set){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, mat_vec_mult){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(6, 6, init);
   Vector_BlockPartition v(6, init);
 
@@ -156,7 +156,7 @@ TEST(ParallelMatrix_BlockRowPartition, mat_vec_mult){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, getRankWithIndex){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition v(8, 8, init);
 
   std::vector<unsigned int> ranks = {0, 0, 1, 1, 2, 2, 3, 4};
@@ -165,7 +165,7 @@ TEST(ParallelMatrix_BlockRowPartition, getRankWithIndex){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, get){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -200,7 +200,7 @@ TEST(ParallelMatrix_BlockRowPartition, get){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, copy){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_BlockRowPartition source(23, 23, init);
 
     std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -255,7 +255,7 @@ TEST(ParallelMatrix_BlockRowPartition, copy){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, clone){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_BlockRowPartition source(23, 23, init);
 
     std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -293,7 +293,7 @@ TEST(ParallelMatrix_BlockRowPartition, clone){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, get_row){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -343,7 +343,7 @@ TEST(ParallelMatrix_BlockRowPartition, get_row){
 }
 
 TEST(ParallelMatrix_BlockRowPartition, set_row){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_BlockRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},

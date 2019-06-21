@@ -3,7 +3,7 @@
 #include "Matrix_CycleRowPartition.h"
 
 TEST(ParallelMatrix_CycleRowPartition, init_modulo){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_CycleRowPartition m(16, 16, init);
 
     ASSERT_EQ(m.nRows(), 16);
@@ -26,7 +26,7 @@ TEST(ParallelMatrix_CycleRowPartition, init_modulo){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, init_non_modulo){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(17, 17, init);
 
   ASSERT_EQ(m.nRows(), 17);
@@ -68,7 +68,7 @@ TEST(ParallelMatrix_CycleRowPartition, init_non_modulo){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, zero_entries){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(131, 131, init);
 
   m.setValues(0.12);
@@ -79,7 +79,7 @@ TEST(ParallelMatrix_CycleRowPartition, zero_entries){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, set){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -117,7 +117,7 @@ TEST(ParallelMatrix_CycleRowPartition, set){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, mat_vec_mult){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(6, 6, init);
   Vector_CyclePartition v(6, init);
 
@@ -150,7 +150,7 @@ TEST(ParallelMatrix_CycleRowPartition, mat_vec_mult){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, print){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(6, 6, init);
 
   std::vector<std::vector<double>> m_vals = {{4.3,   0.052, 2.3,   3.1,   0.042, 5.1},
@@ -180,7 +180,7 @@ TEST(ParallelMatrix_CycleRowPartition, print){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, get){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -215,7 +215,7 @@ TEST(ParallelMatrix_CycleRowPartition, get){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, getRankWithIndex){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition v(10, 10, init);
 
   std::vector<unsigned int> ranks = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1};
@@ -224,7 +224,7 @@ TEST(ParallelMatrix_CycleRowPartition, getRankWithIndex){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, copy){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_CycleRowPartition source(23, 23, init);
 
     std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -279,7 +279,7 @@ TEST(ParallelMatrix_CycleRowPartition, copy){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, clone){
-    LinearAlgebra init;
+    Parallel init;
     Matrix_CycleRowPartition source(23, 23, init);
 
     std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -317,7 +317,7 @@ TEST(ParallelMatrix_CycleRowPartition, clone){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, get_row){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},
@@ -363,7 +363,7 @@ TEST(ParallelMatrix_CycleRowPartition, get_row){
 }
 
 TEST(ParallelMatrix_CycleRowPartition, set_row){
-  LinearAlgebra init;
+  Parallel init;
   Matrix_CycleRowPartition m(23, 23, init);
 
   std::vector<std::vector<double>> vals = {{1.1, 2.3, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052, 7.2, 3.1, 0.042, 5.1, 0.027, 0.032, 6.3, 8.2, 3.6, 4.3, 0.052},

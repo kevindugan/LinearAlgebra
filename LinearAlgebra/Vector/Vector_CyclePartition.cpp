@@ -2,7 +2,7 @@
 #include "math.h"
 #include <iomanip>
 
-Vector_CyclePartition::Vector_CyclePartition(unsigned int size, const LinearAlgebra &linalg) {
+Vector_CyclePartition::Vector_CyclePartition(unsigned int size, const Parallel &linalg) {
     // Calculate the decomposed vector cycle size
     float ratio = float(size) / float(linalg.size());
     unsigned int splitIndex = size - linalg.size() * floor( ratio );

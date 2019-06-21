@@ -9,7 +9,7 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
     public:
         Matrix_CycleRowPartition(unsigned int nRows,
             unsigned int nCols,
-            const LinearAlgebra &linalg);
+            const Parallel &linalg);
         Matrix_CycleRowPartition(const Matrix_CycleRowPartition &other);
         Matrix_CycleRowPartition& operator=(const Matrix_CycleRowPartition &other);
         virtual ~Matrix_CycleRowPartition();
@@ -41,7 +41,7 @@ class Matrix_CycleRowPartition : public AbstractMatrix {
     private:
         unsigned int nGlobalRows, nGlobalColumns;
         unsigned int nLocalRows, nLocalColumns;
-        const LinearAlgebra* linalg;
+        const Parallel* linalg;
         IndexRange globalRowIndexRange;
         double** matrixStorage;
 };

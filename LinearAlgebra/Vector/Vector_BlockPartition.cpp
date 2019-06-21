@@ -2,7 +2,7 @@
 #include <string>
 #include "math.h"
 
-Vector_BlockPartition::Vector_BlockPartition(unsigned int size, const LinearAlgebra& linalg){
+Vector_BlockPartition::Vector_BlockPartition(unsigned int size, const Parallel& linalg){
     // Calculate the decomposed vector block size
     float ratio = float(size) / float(linalg.size());
     unsigned int splitIndex = size - linalg.size() * floor( ratio );
@@ -127,7 +127,7 @@ unsigned int Vector_BlockPartition::findRankWithIndex(const unsigned int index) 
 }
 
 double Vector_BlockPartition::getValue(const unsigned int index) const {
-    linalg_assert(index < this->global_size)
+    Nucleus_ASSERT(index < this->global_size)
 
     // Calculate Rank containing index
     unsigned int indexOnRank = this->findRankWithIndex(index);
