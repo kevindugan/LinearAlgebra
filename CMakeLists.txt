@@ -21,6 +21,7 @@ set(CMAKE_C_COMPILER mpicc)
 #####################################
 add_subdirectory(Nucleus)
 add_subdirectory(LinearAlgebra)
+add_subdirectory(Algorithms)
 
 add_executable(test_exec main.cpp)
 target_link_libraries(test_exec Vector)
