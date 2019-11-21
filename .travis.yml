@@ -2,8 +2,6 @@ language: cpp
 dist: bionic
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
       - gcc-7
       - g++-7
