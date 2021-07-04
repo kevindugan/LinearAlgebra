@@ -26,12 +26,12 @@ std::unique_ptr<AbstractVector> GaussianElimination::solve(const AbstractMatrix 
             if (global_row <= col)
               continue;
 
-            std::vector<double> local_row_values = localA->getLocalRowValues(local_row);
+            double* local_row_values = &localA->getLocalRowValues(local_row);
             double factor = -1.0 * local_row_values[col] / header[col];
-            for (unsigned int entry = col; entry < local_row_values.size(); entry++){
+            for (unsigned int entry = col; entry < localA->nCols(); entry++){
                 local_row_values[entry] += factor * header[entry];
             }
-            localA->setLocalRowValues(local_row, local_row_values);
+            // localA->setLocalRowValues(local_row, local_row_values);
 
             rhs_values[global_row] += factor * rhs_header;
         }
@@ -47,7 +47,7 @@ std::unique_ptr<AbstractVector> GaussianElimination::solve(const AbstractMatrix 
         double factor = 0.0;
         if (this->linalg->rank() == rowOnRank){
             unsigned int local_row = (row - range.begin)/range.skip;
-            double denom = localA->getLocalRowValues(local_row)[row];
+            double denom = ( &localA->getLocalRowValues(local_row) )[row];
             factor = result_values[row] / denom;
             result_values[row] = factor;
         }
@@ -56,7 +56,7 @@ std::unique_ptr<AbstractVector> GaussianElimination::solve(const AbstractMatrix 
             if (global_row >= row)
                 continue;
 
-            std::vector<double> local_row_values = localA->getLocalRowValues(local_row);
+            double* local_row_values = &localA->getLocalRowValues(local_row);
             result_values[global_row] -= local_row_values[row] * factor;
         }
     }
