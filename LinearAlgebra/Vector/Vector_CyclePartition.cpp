@@ -1,6 +1,7 @@
 #include "Vector_CyclePartition.h"
 #include "math.h"
 #include <iomanip>
+#include <sstream>
 
 Vector_CyclePartition::Vector_CyclePartition(unsigned int size, const Parallel &linalg) {
     // Calculate the decomposed vector cycle size

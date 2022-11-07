@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 
 project(LinearAlgebra CXX)
+set(CMAKE_CXX_STANDARD 14)
 
 #####################################
 # GTest

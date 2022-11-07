@@ -33,5 +33,5 @@ TEST(GaussianElimination, cycle_partition){
     std::unique_ptr<AbstractVector> result = solver.solve(A, *b);
 
     double diff = (x.add(-1.0, *result))->l2norm();
-    EXPECT_NEAR(diff, 0.0, 1.0e-11);
+    EXPECT_NEAR(diff, 0.0, 5.0e-11);
 }

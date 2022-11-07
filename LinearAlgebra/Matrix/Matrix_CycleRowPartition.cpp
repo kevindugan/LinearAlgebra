@@ -2,6 +2,7 @@
 #include "Matrix_CycleRowPartition.h"
 #include "math.h"
 #include <iomanip>
+#include <sstream>
 
 Matrix_CycleRowPartition::Matrix_CycleRowPartition(unsigned int nRows,
                                                    unsigned int nCols,
