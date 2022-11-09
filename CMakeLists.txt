@@ -27,3 +27,6 @@ add_subdirectory(Algorithms)
 
 add_executable(test_exec main.cpp)
 target_link_libraries(test_exec Vector)
+
+add_executable(test_sparse mainSparse.cpp)
+target_link_libraries(test_sparse Matrix)
