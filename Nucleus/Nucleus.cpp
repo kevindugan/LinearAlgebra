@@ -131,6 +131,8 @@ void Nucleus::OnTestEnd(const ::testing::TestInfo& info) {
   std::tuple<std::string, unsigned int, unsigned int> prefix;
   if (info.result()->Passed())
     prefix = this->getMPIprefix(color::GREEN, "ok", align::RIGHT);
+  else if (info.result()->Skipped())
+    prefix = this->getMPIprefix(color::YELLOW, "skip", align::RIGHT);
   else
     prefix = this->getMPIprefix(color::RED, "failed", align::CENTER);
 
@@ -149,6 +151,8 @@ void Nucleus::OnTestEnd(const ::testing::TestInfo& info) {
 
 void Nucleus::OnTestPartResult(const ::testing::TestPartResult& result) {
   if (result.type() == ::testing::TestPartResult::kSuccess)
+    return;
+  if (result.type() == ::testing::TestPartResult::kSkip)
     return;
 
 
@@ -172,6 +176,8 @@ void Nucleus::OnTestPartResult(const ::testing::TestPartResult& result) {
     message += "Failure\n";
   else if (result.type() == ::testing::TestPartResult::kSuccess)
     message += "Success";
+  else if (result.type() == ::testing::TestPartResult::kSkip)
+    message += "Skip";
   else
     message += "Unknown result type";
   

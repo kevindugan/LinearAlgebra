@@ -1,7 +1,8 @@
 
 enable_testing()
 
-add_library(LinearSolver GaussianElimination.cpp)
+add_library(LinearSolver GaussianElimination.cpp
+                         GMRes.cpp)
 
 target_include_directories(LinearSolver INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
 
