@@ -40,4 +40,22 @@ class Parallel {
         MPI_Abort(MPI_COMM_WORLD, 1); \
     }
 
+#define Nucleus_ASSERT_GT(left, right) \
+    if(!(left > right)){ \
+        std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << " --- " << left << " <= " << right << std::endl; \
+        MPI_Abort(MPI_COMM_WORLD, 1); \
+    }
+
+#define Nucleus_ASSERT_LE(left, right) \
+    if(!(left <= right)){ \
+        std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << " --- " << left << " > " << right << std::endl; \
+        MPI_Abort(MPI_COMM_WORLD, 1); \
+    }
+
+#define Nucleus_ASSERT_GE(left, right) \
+    if(!(left >= right)){ \
+        std::cerr << "Error at " << __FILE__ << ": " << __LINE__ << " --- " << left << " < " << right << std::endl; \
+        MPI_Abort(MPI_COMM_WORLD, 1); \
+    }
+
 #endif // PARALLEL_H_A72K
